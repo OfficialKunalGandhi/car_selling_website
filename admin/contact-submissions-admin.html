@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>Contact Submissions - Admin Panel - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <!-- Header -->
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-[#92aec8] hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <h1 class="text-white text-2xl font-bold">Contact Submissions</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="total-submissions" class="text-[#92aec8] text-sm">Loading...</span>
+                    <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Website</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto p-6">
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Total Submissions</p>
+                            <p id="stat-total" class="text-white text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-blue-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">New (Unread)</p>
+                            <p id="stat-new" class="text-yellow-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-yellow-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">In Progress</p>
+                            <p id="stat-progress" class="text-blue-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-blue-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Resolved</p>
+                            <p id="stat-resolved" class="text-green-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-green-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Actions -->
+            <div class="bg-[#243647] rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <select id="status-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                            <option value="">All Status</option>
+                            <option value="new">New</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+
+                        <select id="subject-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                            <option value="">All Subjects</option>
+                            <option value="vehicle-inquiry">Vehicle Inquiry</option>
+                            <option value="service-appointment">Service Appointment</option>
+                            <option value="financing">Financing Information</option>
+                            <option value="trade-in">Trade-In Evaluation</option>
+                            <option value="general">General Question</option>
+                            <option value="other">Other</option>
+                        </select>
+
+                        <input type="date" id="date-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Export CSV
+                        </button>
+                        <button id="refresh-btn" class="px-4 py-2 bg-[#1473cc] text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submissions List -->
+            <div class="bg-[#243647] rounded-xl overflow-hidden">
+                <div class="p-6 border-b border-[#374353]">
+                    <h3 class="text-white text-lg font-bold">Contact Submissions</h3>
+                    <p class="text-[#92aec8] text-sm">Manage and respond to customer inquiries</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="p-8 text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1473cc] mx-auto mb-4"></div>
+                    <p class="text-[#92aec8]">Loading submissions...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden p-8 text-center">
+                    <svg class="w-16 h-16 text-[#92aec8] mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    </svg>
+                    <p class="text-[#92aec8] text-lg mb-2">No contact submissions found</p>
+                    <p class="text-[#92aec8] text-sm">Contact submissions will appear here when customers use the contact form.</p>
+                </div>
+
+                <!-- Submissions Table -->
+                <div id="submissions-container" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-[#1c2d3e]">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Subject</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="submissions-table-body" class="divide-y divide-[#374353]">
+                                <!-- Submissions will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View/Edit Submission Modal -->
+    <div id="submission-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-[#374353]">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-white text-xl font-bold">Contact Submission Details</h3>
+                    <button id="close-modal" class="text-[#92aec8] hover:text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Contact Information -->
+                    <div class="space-y-4">
+                        <h4 class="text-white text-lg font-bold">Contact Information</h4>
+                        
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Full Name</label>
+                            <p id="modal-name" class="text-white text-lg"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Email</label>
+                            <p id="modal-email" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Phone</label>
+                            <p id="modal-phone" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Subject</label>
+                            <p id="modal-subject" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Submission Date</label>
+                            <p id="modal-date" class="text-white"></p>
+                        </div>
+                    </div>
+
+                    <!-- Status and Actions -->
+                    <div class="space-y-4">
+                        <h4 class="text-white text-lg font-bold">Status & Actions</h4>
+                        
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Status</label>
+                            <select id="modal-status" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                <option value="new">New</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Priority</label>
+                            <select id="modal-priority" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Assigned To</label>
+                            <input type="text" id="modal-assigned" placeholder="Enter staff member name" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc]">
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button id="save-submission" class="flex-1 bg-[#1473cc] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                Save Changes
+                            </button>
+                            <button id="delete-submission" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Content -->
+                <div class="mt-6 pt-6 border-t border-[#374353]">
+                    <h4 class="text-white text-lg font-bold mb-4">Message</h4>
+                    <div class="bg-[#243647] rounded-lg p-4">
+                        <p id="modal-message" class="text-white whitespace-pre-wrap"></p>
+                    </div>
+                </div>
+
+                <!-- Admin Notes -->
+                <div class="mt-6 pt-6 border-t border-[#374353]">
+                    <h4 class="text-white text-lg font-bold mb-4">Admin Notes</h4>
+                    <textarea id="modal-notes" rows="4" placeholder="Add internal notes about this submission..." class="w-full px-4 py-3 bg-[#243647] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc]"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let db = null;
+        let allSubmissions = [];
+        let currentSubmissionId = null;
+
+        // Initialize Firebase
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to initialize Firebase
+            try {
+                if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyBl8fYB2ZvNjKs7ufLFQh7kzjskE5Kzqr8",
+                        authDomain: "gym-app-bd9c1.firebaseapp.com",
+                        projectId: "gym-app-bd9c1",
+                        storageBucket: "gym-app-bd9c1.appspot.com",
+                        messagingSenderId: "648751600647",
+                        appId: "1:648751600647:web:9a2b5c7d8e3f4g5h"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                if (firebase.apps.length > 0) {
+                    db = firebase.firestore();
+                    console.log('✅ Firebase initialized successfully');
+                }
+            } catch (error) {
+                console.warn('⚠️ Firebase initialization failed:', error);
+                console.log('📱 Using localStorage fallback');
+            }
+
+            // Load submissions
+            loadSubmissions();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Filter change events
+            document.getElementById('status-filter').addEventListener('change', filterSubmissions);
+            document.getElementById('subject-filter').addEventListener('change', filterSubmissions);
+            document.getElementById('date-filter').addEventListener('change', filterSubmissions);
+            
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', loadSubmissions);
+            
+            // Export button
+            document.getElementById('export-btn').addEventListener('click', exportToCSV);
+            
+            // Modal events
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('save-submission').addEventListener('click', saveSubmissionChanges);
+            document.getElementById('delete-submission').addEventListener('click', deleteSubmission);
+            
+            // Close modal when clicking outside
+            document.getElementById('submission-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        async function loadSubmissions() {
+            const loadingState = document.getElementById('loading-state');
+            const emptyState = document.getElementById('empty-state');
+            const submissionsContainer = document.getElementById('submissions-container');
+            
+            loadingState.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            submissionsContainer.classList.add('hidden');
+
+            try {
+                let submissions = [];
+                
+                if (db) {
+                    // Load from Firebase
+                    const snapshot = await db.collection('contact-submissions')
+                        .orderBy('timestamp', 'desc')
+                        .get();
+                    
+                    submissions = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                } else {
+                    // Load from localStorage fallback
+                    const stored = localStorage.getItem('contactSubmissions');
+                    if (stored) {
+                        submissions = JSON.parse(stored);
+                    }
+                }
+
+                allSubmissions = submissions;
+                updateStats(submissions);
+                displaySubmissions(submissions);
+                
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+                showError('Failed to load contact submissions');
+            } finally {
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        function updateStats(submissions) {
+            const total = submissions.length;
+            const newCount = submissions.filter(s => s.status === 'new' || !s.status).length;
+            const progressCount = submissions.filter(s => s.status === 'in-progress').length;
+            const resolvedCount = submissions.filter(s => s.status === 'resolved').length;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-new').textContent = newCount;
+            document.getElementById('stat-progress').textContent = progressCount;
+            document.getElementById('stat-resolved').textContent = resolvedCount;
+            document.getElementById('total-submissions').textContent = `${total} total submissions`;
+        }
+
+        function displaySubmissions(submissions) {
+            const container = document.getElementById('submissions-container');
+            const emptyState = document.getElementById('empty-state');
+            const tableBody = document.getElementById('submissions-table-body');
+
+            if (submissions.length === 0) {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            tableBody.innerHTML = submissions.map(submission => {
+                const date = new Date(submission.timestamp || Date.now());
+                const status = submission.status || 'new';
+                const statusColors = {
+                    'new': 'bg-yellow-600',
+                    'in-progress': 'bg-blue-600',
+                    'resolved': 'bg-green-600'
+                };
+
+                return `
+                    <tr class="hover:bg-[#1c2d3e] transition-colors cursor-pointer" onclick="openSubmissionModal('${submission.id}')">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-medium text-white rounded-full ${statusColors[status]}">
+                                ${status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-white font-medium">${submission.firstName || ''} ${submission.lastName || ''}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-white">${getSubjectDisplay(submission.subject)}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-[#92aec8]">${submission.email || 'N/A'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-[#92aec8]">${date.toLocaleDateString()}</div>
+                            <div class="text-xs text-[#92aec8]">${date.toLocaleTimeString()}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="event.stopPropagation(); openSubmissionModal('${submission.id}')" class="text-[#1473cc] hover:text-blue-400 mr-3">
+                                View
+                            </button>
+                            <button onclick="event.stopPropagation(); quickStatusUpdate('${submission.id}', '${status === 'resolved' ? 'new' : 'resolved'}')" class="text-green-400 hover:text-green-300">
+                                ${status === 'resolved' ? 'Unresolve' : 'Resolve'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getSubjectDisplay(subject) {
+            const subjects = {
+                'vehicle-inquiry': 'Vehicle Inquiry',
+                'service-appointment': 'Service Appointment',
+                'financing': 'Financing Information',
+                'trade-in': 'Trade-In Evaluation',
+                'general': 'General Question',
+                'other': 'Other'
+            };
+            return subjects[subject] || subject || 'Unknown';
+        }
+
+        function filterSubmissions() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const subjectFilter = document.getElementById('subject-filter').value;
+            const dateFilter = document.getElementById('date-filter').value;
+
+            let filtered = allSubmissions.filter(submission => {
+                const status = submission.status || 'new';
+                const subject = submission.subject || '';
+                const date = new Date(submission.timestamp || Date.now());
+                const filterDate = dateFilter ? new Date(dateFilter) : null;
+
+                const statusMatch = !statusFilter || status === statusFilter;
+                const subjectMatch = !subjectFilter || subject === subjectFilter;
+                const dateMatch = !filterDate || date.toDateString() === filterDate.toDateString();
+
+                return statusMatch && subjectMatch && dateMatch;
+            });
+
+            displaySubmissions(filtered);
+        }
+
+        function openSubmissionModal(submissionId) {
+            const submission = allSubmissions.find(s => s.id === submissionId);
+            if (!submission) return;
+
+            currentSubmissionId = submissionId;
+            
+            // Populate modal fields
+            document.getElementById('modal-name').textContent = `${submission.firstName || ''} ${submission.lastName || ''}`.trim();
+            document.getElementById('modal-email').textContent = submission.email || 'N/A';
+            document.getElementById('modal-phone').textContent = submission.phone || 'N/A';
+            document.getElementById('modal-subject').textContent = getSubjectDisplay(submission.subject);
+            document.getElementById('modal-message').textContent = submission.message || 'No message provided';
+            document.getElementById('modal-date').textContent = new Date(submission.timestamp || Date.now()).toLocaleString();
+            
+            // Set form values
+            document.getElementById('modal-status').value = submission.status || 'new';
+            document.getElementById('modal-priority').value = submission.priority || 'medium';
+            document.getElementById('modal-assigned').value = submission.assignedTo || '';
+            document.getElementById('modal-notes').value = submission.adminNotes || '';
+            
+            // Show modal
+            document.getElementById('submission-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('submission-modal').classList.add('hidden');
+            currentSubmissionId = null;
+        }
+
+        async function saveSubmissionChanges() {
+            if (!currentSubmissionId) return;
+
+            const updates = {
+                status: document.getElementById('modal-status').value,
+                priority: document.getElementById('modal-priority').value,
+                assignedTo: document.getElementById('modal-assigned').value,
+                adminNotes: document.getElementById('modal-notes').value,
+                lastUpdated: new Date().toISOString()
+            };
+
+            try {
+                if (db) {
+                    // Update in Firebase
+                    await db.collection('contact-submissions').doc(currentSubmissionId).update(updates);
+                } else {
+                    // Update in localStorage
+                    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                    const index = submissions.findIndex(s => s.id === currentSubmissionId);
+                    if (index !== -1) {
+                        submissions[index] = { ...submissions[index], ...updates };
+                        localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                    }
+                }
+
+                // Update local array
+                const index = allSubmissions.findIndex(s => s.id === currentSubmissionId);
+                if (index !== -1) {
+                    allSubmissions[index] = { ...allSubmissions[index], ...updates };
+                }
+
+                closeModal();
+                displaySubmissions(allSubmissions);
+                updateStats(allSubmissions);
+                showSuccess('Submission updated successfully');
+                
+            } catch (error) {
+                console.error('Error updating submission:', error);
+                showError('Failed to update submission');
+            }
+        }
+
+        async function deleteSubmission() {
+            if (!currentSubmissionId || !confirm('Are you sure you want to delete this submission? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                if (db) {
+                    // Delete from Firebase
+                    await db.collection('contact-submissions').doc(currentSubmissionId).delete();
+                } else {
+                    // Delete from localStorage
+                    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                    const filtered = submissions.filter(s => s.id !== currentSubmissionId);
+                    localStorage.setItem('contactSubmissions', JSON.stringify(filtered));
+                }
+
+                // Remove from local array
+                allSubmissions = allSubmissions.filter(s => s.id !== currentSubmissionId);
+
+                closeModal();
+                displaySubmissions(allSubmissions);
+                updateStats(allSubmissions);
+                showSuccess('Submission deleted successfully');
+                
+            } catch (error) {
+                console.error('Error deleting submission:', error);
+                showError('Failed to delete submission');
+            }
+        }
+
+        async function quickStatusUpdate(submissionId, newStatus) {
+            try {
+                const updates = {
+                    status: newStatus,
+                    lastUpdated: new Date().toISOString()
+                };
+
+                if (db) {
+                    await db.collection('contact-submissions').doc(submissionId).update(updates);
+                } else {
+                    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                    const index = submissions.findIndex(s => s.id === submissionId);
+                    if (index !== -1) {
+                        submissions[index] = { ...submissions[index], ...updates };
+                        localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                    }
+                }
+
+                // Update local array
+                const index = allSubmissions.findIndex(s => s.id === submissionId);
+                if (index !== -1) {
+                    allSubmissions[index] = { ...allSubmissions[index], ...updates };
+                }
+
+                displaySubmissions(allSubmissions);
+                updateStats(allSubmissions);
+                showSuccess(`Submission marked as ${newStatus.replace('-', ' ')}`);
+                
+            } catch (error) {
+                console.error('Error updating submission status:', error);
+                showError('Failed to update status');
+            }
+        }
+
+        function exportToCSV() {
+            const headers = ['Date', 'Name', 'Email', 'Phone', 'Subject', 'Status', 'Priority', 'Assigned To', 'Message', 'Admin Notes'];
+            
+            const csvContent = [
+                headers.join(','),
+                ...allSubmissions.map(submission => {
+                    const date = new Date(submission.timestamp || Date.now()).toLocaleString();
+                    const name = `"${submission.firstName || ''} ${submission.lastName || ''}".trim()`;
+                    const email = `"${submission.email || ''}"`;
+                    const phone = `"${submission.phone || ''}"`;
+                    const subject = `"${getSubjectDisplay(submission.subject)}"`;
+                    const status = `"${submission.status || 'new'}"`;
+                    const priority = `"${submission.priority || 'medium'}"`;
+                    const assigned = `"${submission.assignedTo || ''}"`;
+                    const message = `"${(submission.message || '').replace(/"/g, '""')}"`;
+                    const notes = `"${(submission.adminNotes || '').replace(/"/g, '""')}"`;
+                    
+                    return [date, name, email, phone, subject, status, priority, assigned, message, notes].join(',');
+                })
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `contact-submissions-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showSuccess(message) {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+
+        function showError(message) {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

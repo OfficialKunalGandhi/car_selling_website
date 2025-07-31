@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Inquiries Management - Auto Emporium Admin</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#111a22] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#243647] px-10 py-3">
+                <div class="flex items-center gap-4 text-white">
+                    <div class="size-4">
+                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+                    </div>
+                    <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Auto Emporium Admin</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-[#92aec8] hover:text-white transition-colors text-sm font-medium">← Back to Dashboard</a>
+                    <div class="text-[#92aec8] text-sm">Vehicle Inquiries Management</div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="px-10 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
+                    
+                    <!-- Page Header -->
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h1 class="text-white text-3xl font-bold mb-2">Vehicle Inquiries Management</h1>
+                            <p class="text-[#92aec8]">Manage customer vehicle inquiries and test drive requests</p>
+                        </div>
+                        <button onclick="exportToCSV()" class="bg-[#1473cc] text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            Export CSV
+                        </button>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-[#243647] rounded-xl p-6">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-blue-600 p-3 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white text-2xl font-bold" id="total-inquiries">0</div>
+                                    <div class="text-[#92aec8] text-sm">Total Inquiries</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#243647] rounded-xl p-6">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-orange-600 p-3 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white text-2xl font-bold" id="pending-inquiries">0</div>
+                                    <div class="text-[#92aec8] text-sm">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#243647] rounded-xl p-6">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-teal-600 p-3 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white text-2xl font-bold" id="test-drives">0</div>
+                                    <div class="text-[#92aec8] text-sm">Test Drives</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#243647] rounded-xl p-6">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-green-600 p-3 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-white text-2xl font-bold" id="responded-inquiries">0</div>
+                                    <div class="text-[#92aec8] text-sm">Responded</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="bg-[#243647] rounded-xl p-6 mb-8">
+                        <h3 class="text-white text-lg font-bold mb-4">Filters</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Type</label>
+                                <select id="filter-type" onchange="applyFilters()" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Types</option>
+                                    <option value="vehicle-inquiry">Vehicle Inquiry</option>
+                                    <option value="test-drive">Test Drive</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Status</label>
+                                <select id="filter-status" onchange="applyFilters()" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="responded">Responded</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Date Range</label>
+                                <select id="filter-date" onchange="applyFilters()" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Time</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Search</label>
+                                <input type="text" id="search-input" placeholder="Search by name, email, vehicle..." onkeyup="applyFilters()" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inquiries Table -->
+                    <div class="bg-[#243647] rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-[#111a22]">
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Type</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Customer</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Vehicle</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Contact</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Date</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Status</th>
+                                        <th class="text-left p-4 text-[#92aec8] font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inquiries-tbody">
+                                    <tr>
+                                        <td colspan="7" class="text-center p-8 text-[#92aec8]">Loading inquiries...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inquiry Details Modal -->
+    <div id="inquiry-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-white text-xl font-bold">Inquiry Details</h3>
+                    <button onclick="closeModal()" class="text-[#92aec8] hover:text-white text-2xl">×</button>
+                </div>
+                
+                <div id="modal-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlRSQJzFqrL-QENTJruiUltcdscOCdGNw",
+            authDomain: "gym-app-bd9c1.firebaseapp.com",
+            projectId: "gym-app-bd9c1",
+            storageBucket: "gym-app-bd9c1.firebasestorage.app",
+            messagingSenderId: "417740582785",
+            appId: "1:417740582785:web:79815f97de1bda79454280",
+            measurementId: "G-T4YJQDXL08"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization failed:', error);
+            db = null;
+        }
+
+        // Global variables
+        let allInquiries = [];
+        let filteredInquiries = [];
+
+        // Load inquiries from Firebase and localStorage
+        async function loadInquiries() {
+            console.log('Loading inquiries...');
+            allInquiries = [];
+
+            // Load from Firebase if available
+            if (db) {
+                try {
+                    // Load vehicle inquiries
+                    const vehicleInquiriesSnapshot = await db.collection('vehicle-inquiries')
+                        .orderBy('submittedAt', 'desc').get();
+                    
+                    vehicleInquiriesSnapshot.forEach(doc => {
+                        allInquiries.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    // Load test drive requests
+                    const testDriveSnapshot = await db.collection('test-drive-requests')
+                        .orderBy('submittedAt', 'desc').get();
+                    
+                    testDriveSnapshot.forEach(doc => {
+                        allInquiries.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    console.log(`✅ Loaded ${allInquiries.length} inquiries from Firebase`);
+                } catch (error) {
+                    console.error('❌ Error loading from Firebase:', error);
+                }
+            }
+
+            // Load from localStorage as fallback
+            const localVehicleInquiries = JSON.parse(localStorage.getItem('vehicleInquiries') || '[]');
+            const localTestDrives = JSON.parse(localStorage.getItem('testDriveRequests') || '[]');
+            
+            localVehicleInquiries.forEach(inquiry => {
+                if (!allInquiries.find(item => item.id === inquiry.id)) {
+                    allInquiries.push(inquiry);
+                }
+            });
+
+            localTestDrives.forEach(testDrive => {
+                if (!allInquiries.find(item => item.id === testDrive.id)) {
+                    allInquiries.push(testDrive);
+                }
+            });
+
+            // Sort by submitted date (newest first)
+            allInquiries.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+            filteredInquiries = [...allInquiries];
+            updateStatistics();
+            displayInquiries();
+            console.log(`📊 Total inquiries loaded: ${allInquiries.length}`);
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const total = allInquiries.length;
+            const pending = allInquiries.filter(item => item.status === 'pending').length;
+            const testDrives = allInquiries.filter(item => item.type === 'test-drive').length;
+            const responded = allInquiries.filter(item => item.status === 'responded' || item.status === 'completed').length;
+
+            document.getElementById('total-inquiries').textContent = total;
+            document.getElementById('pending-inquiries').textContent = pending;
+            document.getElementById('test-drives').textContent = testDrives;
+            document.getElementById('responded-inquiries').textContent = responded;
+        }
+
+        // Display inquiries in table
+        function displayInquiries() {
+            const tbody = document.getElementById('inquiries-tbody');
+            
+            if (filteredInquiries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center p-8 text-[#92aec8]">No inquiries found</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredInquiries.map(inquiry => `
+                <tr class="border-b border-[#111a22] hover:bg-[#111a22] transition-colors">
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded text-xs font-medium ${
+                            inquiry.type === 'test-drive' 
+                                ? 'bg-teal-600 text-white' 
+                                : 'bg-blue-600 text-white'
+                        }">
+                            ${inquiry.type === 'test-drive' ? 'Test Drive' : 'Vehicle Inquiry'}
+                        </span>
+                    </td>
+                    <td class="p-4">
+                        <div class="text-white font-medium">${inquiry.customerName}</div>
+                        <div class="text-[#92aec8] text-sm">${inquiry.customerEmail}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="text-white">${inquiry.vehicleName}</div>
+                        <div class="text-[#92aec8] text-sm">ID: ${inquiry.vehicleId}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="text-white">${inquiry.customerPhone || 'N/A'}</div>
+                        ${inquiry.preferredDate ? `<div class="text-[#92aec8] text-sm">${inquiry.preferredDate} ${inquiry.preferredTime || ''}</div>` : ''}
+                    </td>
+                    <td class="p-4">
+                        <div class="text-white">${new Date(inquiry.submittedAt).toLocaleDateString()}</div>
+                        <div class="text-[#92aec8] text-sm">${new Date(inquiry.submittedAt).toLocaleTimeString()}</div>
+                    </td>
+                    <td class="p-4">
+                        <select onchange="updateStatus('${inquiry.id}', this.value)" class="bg-[#111a22] text-white border border-[#92aec8] rounded px-2 py-1 text-sm">
+                            <option value="pending" ${inquiry.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="responded" ${inquiry.status === 'responded' ? 'selected' : ''}>Responded</option>
+                            <option value="completed" ${inquiry.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex gap-2">
+                            <button onclick="viewInquiry('${inquiry.id}')" class="bg-[#1473cc] text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+                                View
+                            </button>
+                            <button onclick="deleteInquiry('${inquiry.id}')" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition-colors">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const typeFilter = document.getElementById('filter-type').value;
+            const statusFilter = document.getElementById('filter-status').value;
+            const dateFilter = document.getElementById('filter-date').value;
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            filteredInquiries = allInquiries.filter(inquiry => {
+                let matches = true;
+
+                // Type filter
+                if (typeFilter && inquiry.type !== typeFilter) matches = false;
+
+                // Status filter
+                if (statusFilter && inquiry.status !== statusFilter) matches = false;
+
+                // Date filter
+                if (dateFilter) {
+                    const inquiryDate = new Date(inquiry.submittedAt);
+                    const today = new Date();
+                    
+                    switch (dateFilter) {
+                        case 'today':
+                            if (inquiryDate.toDateString() !== today.toDateString()) matches = false;
+                            break;
+                        case 'week':
+                            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            if (inquiryDate < weekAgo) matches = false;
+                            break;
+                        case 'month':
+                            const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            if (inquiryDate < monthAgo) matches = false;
+                            break;
+                    }
+                }
+
+                // Search filter
+                if (searchTerm) {
+                    const searchableText = `${inquiry.customerName} ${inquiry.customerEmail} ${inquiry.vehicleName} ${inquiry.message || ''} ${inquiry.notes || ''}`.toLowerCase();
+                    if (!searchableText.includes(searchTerm)) matches = false;
+                }
+
+                return matches;
+            });
+
+            displayInquiries();
+        }
+
+        // Update inquiry status
+        async function updateStatus(inquiryId, newStatus) {
+            try {
+                // Update in Firebase if available
+                if (db && !inquiryId.startsWith('local-')) {
+                    const inquiry = allInquiries.find(item => item.id === inquiryId);
+                    if (inquiry) {
+                        const collection = inquiry.type === 'test-drive' ? 'test-drive-requests' : 'vehicle-inquiries';
+                        await db.collection(collection).doc(inquiryId).update({
+                            status: newStatus,
+                            updatedAt: new Date().toISOString()
+                        });
+                    }
+                } else {
+                    // Update in localStorage
+                    const inquiry = allInquiries.find(item => item.id === inquiryId);
+                    if (inquiry) {
+                        if (inquiry.type === 'test-drive') {
+                            const testDrives = JSON.parse(localStorage.getItem('testDriveRequests') || '[]');
+                            const index = testDrives.findIndex(item => item.id === inquiryId);
+                            if (index !== -1) {
+                                testDrives[index].status = newStatus;
+                                testDrives[index].updatedAt = new Date().toISOString();
+                                localStorage.setItem('testDriveRequests', JSON.stringify(testDrives));
+                            }
+                        } else {
+                            const inquiries = JSON.parse(localStorage.getItem('vehicleInquiries') || '[]');
+                            const index = inquiries.findIndex(item => item.id === inquiryId);
+                            if (index !== -1) {
+                                inquiries[index].status = newStatus;
+                                inquiries[index].updatedAt = new Date().toISOString();
+                                localStorage.setItem('vehicleInquiries', JSON.stringify(inquiries));
+                            }
+                        }
+                    }
+                }
+
+                // Update local data
+                const inquiry = allInquiries.find(item => item.id === inquiryId);
+                if (inquiry) {
+                    inquiry.status = newStatus;
+                    inquiry.updatedAt = new Date().toISOString();
+                }
+
+                updateStatistics();
+                displayInquiries();
+                showToast('Status updated successfully', 'success');
+
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showToast('Error updating status', 'error');
+            }
+        }
+
+        // View inquiry details
+        function viewInquiry(inquiryId) {
+            const inquiry = allInquiries.find(item => item.id === inquiryId);
+            if (!inquiry) return;
+
+            const modal = document.getElementById('inquiry-modal');
+            const content = document.getElementById('modal-content');
+
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Type</label>
+                            <div class="text-white">
+                                <span class="px-2 py-1 rounded text-xs font-medium ${
+                                    inquiry.type === 'test-drive' 
+                                        ? 'bg-teal-600 text-white' 
+                                        : 'bg-blue-600 text-white'
+                                }">
+                                    ${inquiry.type === 'test-drive' ? 'Test Drive Request' : 'Vehicle Inquiry'}
+                                </span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Status</label>
+                            <div class="text-white capitalize">${inquiry.status}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Customer Name</label>
+                            <div class="text-white">${inquiry.customerName}</div>
+                        </div>
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Email</label>
+                            <div class="text-white">${inquiry.customerEmail}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Phone</label>
+                            <div class="text-white">${inquiry.customerPhone || 'Not provided'}</div>
+                        </div>
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Submitted</label>
+                            <div class="text-white">${new Date(inquiry.submittedAt).toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[#92aec8] text-sm font-medium mb-1">Vehicle</label>
+                        <div class="text-white">${inquiry.vehicleName} (ID: ${inquiry.vehicleId})</div>
+                    </div>
+
+                    ${inquiry.type === 'test-drive' ? `
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[#92aec8] text-sm font-medium mb-1">Preferred Date</label>
+                                <div class="text-white">${inquiry.preferredDate || 'Not specified'}</div>
+                            </div>
+                            <div>
+                                <label class="block text-[#92aec8] text-sm font-medium mb-1">Preferred Time</label>
+                                <div class="text-white">${inquiry.preferredTime || 'Not specified'}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">License Number</label>
+                            <div class="text-white">${inquiry.licenseNumber || 'Not provided'}</div>
+                        </div>
+                    ` : ''}
+
+                    ${inquiry.message ? `
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Message</label>
+                            <div class="text-white bg-[#243647] p-3 rounded">${inquiry.message}</div>
+                        </div>
+                    ` : ''}
+
+                    ${inquiry.notes ? `
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Notes</label>
+                            <div class="text-white bg-[#243647] p-3 rounded">${inquiry.notes}</div>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex gap-3 pt-4">
+                        <button onclick="closeModal()" class="flex-1 bg-[#243647] text-white px-4 py-2 rounded hover:bg-[#1473cc] transition-colors">
+                            Close
+                        </button>
+                        <button onclick="deleteInquiry('${inquiry.id}'); closeModal();" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('inquiry-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Delete inquiry
+        async function deleteInquiry(inquiryId) {
+            if (!confirm('Are you sure you want to delete this inquiry?')) return;
+
+            try {
+                // Delete from Firebase if available
+                if (db && !inquiryId.startsWith('local-')) {
+                    const inquiry = allInquiries.find(item => item.id === inquiryId);
+                    if (inquiry) {
+                        const collection = inquiry.type === 'test-drive' ? 'test-drive-requests' : 'vehicle-inquiries';
+                        await db.collection(collection).doc(inquiryId).delete();
+                    }
+                } else {
+                    // Delete from localStorage
+                    const inquiry = allInquiries.find(item => item.id === inquiryId);
+                    if (inquiry) {
+                        if (inquiry.type === 'test-drive') {
+                            const testDrives = JSON.parse(localStorage.getItem('testDriveRequests') || '[]');
+                            const filtered = testDrives.filter(item => item.id !== inquiryId);
+                            localStorage.setItem('testDriveRequests', JSON.stringify(filtered));
+                        } else {
+                            const inquiries = JSON.parse(localStorage.getItem('vehicleInquiries') || '[]');
+                            const filtered = inquiries.filter(item => item.id !== inquiryId);
+                            localStorage.setItem('vehicleInquiries', JSON.stringify(filtered));
+                        }
+                    }
+                }
+
+                // Remove from local data
+                allInquiries = allInquiries.filter(item => item.id !== inquiryId);
+                filteredInquiries = filteredInquiries.filter(item => item.id !== inquiryId);
+
+                updateStatistics();
+                displayInquiries();
+                showToast('Inquiry deleted successfully', 'success');
+
+            } catch (error) {
+                console.error('Error deleting inquiry:', error);
+                showToast('Error deleting inquiry', 'error');
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const headers = ['Type', 'Customer Name', 'Email', 'Phone', 'Vehicle', 'Date', 'Time', 'License', 'Message', 'Notes', 'Status', 'Submitted At'];
+            
+            const csvData = [
+                headers,
+                ...filteredInquiries.map(inquiry => [
+                    inquiry.type === 'test-drive' ? 'Test Drive' : 'Vehicle Inquiry',
+                    inquiry.customerName,
+                    inquiry.customerEmail,
+                    inquiry.customerPhone || '',
+                    inquiry.vehicleName,
+                    inquiry.preferredDate || '',
+                    inquiry.preferredTime || '',
+                    inquiry.licenseNumber || '',
+                    inquiry.message || '',
+                    inquiry.notes || '',
+                    inquiry.status,
+                    new Date(inquiry.submittedAt).toLocaleString()
+                ])
+            ];
+
+            const csvContent = csvData.map(row => 
+                row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+            ).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `vehicle-inquiries-${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                toast.classList.add('bg-green-600');
+            } else if (type === 'error') {
+                toast.classList.add('bg-red-600');
+            } else {
+                toast.classList.add('bg-blue-600');
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Vehicle Inquiries Admin page loaded');
+            loadInquiries();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('inquiry-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'inquiry-modal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

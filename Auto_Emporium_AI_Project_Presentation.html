@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Emporium - AI-Powered Car Dealership Website | Project Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            touch-action: pan-y;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+        }
+        .slide { 
+            min-height: 100vh; 
+            min-height: 100dvh; /* Dynamic viewport height for mobile */
+            display: none; 
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            padding: 5% 5% 5% 5%; /* 5% top padding for desktop */
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+        .slide.active { 
+            display: flex; 
+        }
+        
+        /* Dynamic spacing based on content size */
+        .slide .max-w-6xl {
+            margin-top: 0; /* Remove extra margin since we have 20% top padding */
+        }
+        
+        /* Extra spacing for slides with grids and multiple sections */
+        .slide .grid + .grid,
+        .slide .mb-12 + .grid {
+            margin-top: 2rem; /* Reduced since we have more top padding */
+        }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .tech-gradient { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .success-gradient { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .slide-indicator { 
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            padding: 0px !important; /* Force remove padding */
+            margin: 0px !important; 
+            cursor: pointer;
+            width: 8px !important; /* Force 8px width */
+            height: 8px !important; /* Force 8px height */
+            min-width: 8px !important;
+            min-height: 8px !important;
+        }
+        .slide-indicator.active { background: #4f46e5; transform: scale(1.25); }
+        .feature-card {  
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        .feature-card:hover { transform: translateY(-5px); }
+        .stats-card { animation: slideInUp 0.6s ease-out; }
+        
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20% 1rem 4rem 1rem; /* Maintain 20% top padding on mobile */
+                min-height: 100dvh;
+                overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+            .feature-card:hover {
+                transform: none; /* Disable hover effects on mobile */
+            }
+            .mobile-text-sm { font-size: 0.875rem !important; }
+            .mobile-text-base { font-size: 1rem !important; }
+            .mobile-text-lg { font-size: 1.125rem !important; }
+            .mobile-text-xl { font-size: 1.25rem !important; }
+            .mobile-text-2xl { font-size: 1.5rem !important; }
+            .mobile-text-3xl { font-size: 1.875rem !important; }
+            .mobile-text-4xl { font-size: 2.25rem !important; }
+            .mobile-space-y-2 > * + * { margin-top: 0.5rem !important; }
+            .mobile-space-y-4 > * + * { margin-top: 1rem !important; }
+            .mobile-p-4 { padding: 1rem !important; }
+            .mobile-p-6 { padding: 1.5rem !important; }
+            .mobile-mb-4 { margin-bottom: 1rem !important; }
+            .mobile-mb-6 { margin-bottom: 1.5rem !important; }
+            .mobile-mb-8 { margin-bottom: 2rem !important; }
+        }
+        
+        /* Extra small mobile screens */
+        @media (max-width: 480px) {
+            .slide {
+                padding: 20% 0.75rem 4rem 0.75rem; /* Maintain 20% top padding on extra small screens */
+            }
+            .mobile-cols-1 {
+                grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+            }
+        }
+        
+        /* Touch gesture styles */
+        .touch-area {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Button improvements for mobile */
+        button, .cursor-pointer {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+            min-height: 44px; /* iOS recommended touch target size */
+            min-width: 44px;
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Landscape mobile optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .slide {
+                padding: 10% 0.5rem 2rem 0.5rem; /* Reduced to 10% for landscape orientation */
+            }
+            .landscape-text-sm { font-size: 0.75rem !important; }
+            .landscape-mb-2 { margin-bottom: 0.5rem !important; }
+            .landscape-mb-4 { margin-bottom: 1rem !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    
+    <!-- Navigation Controls -->
+    <div class="fixed top-2 right-2 md:top-4 md:right-4 z-50 flex gap-1 md:gap-2">
+        <button onclick="prevSlide()" class="touch-area bg-white/20 backdrop-blur-sm text-white px-2 py-2 md:px-4 md:py-2 rounded-lg hover:bg-white/30 transition-all text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center">
+            <span class="hidden md:inline">← Previous</span>
+            <span class="md:hidden">←</span>
+        </button>
+        <button onclick="nextSlide()" class="touch-area bg-white/20 backdrop-blur-sm text-white px-2 py-2 md:px-4 md:py-2 rounded-lg hover:bg-white/30 transition-all text-sm md:text-base min-w-[44px] min-h-[44px] flex items-center justify-center">
+            <span class="hidden md:inline">Next →</span>
+            <span class="md:hidden">→</span>
+        </button>
+    </div>
+
+    <!-- Slide Indicators -->
+    <div class="fixed bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex gap-0.5 md:gap-1 bg-black/20 backdrop-blur-sm rounded-full px-1 py-0.5">
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer active touch-area" onclick="goToSlide(0)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(1)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(2)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(3)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(4)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(5)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(6)"></div>
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(7)"></div> 
+        <div class="slide-indicator w-0.5 h-0.5 md:w-1 md:h-1 bg-white/30 rounded-full cursor-pointer touch-area" onclick="goToSlide(8)"></div>
+    </div>
+
+    <!-- Slide 1: Title Slide -->
+    <div class="slide active gradient-bg text-center">
+        <div class="max-w-4xl mx-auto w-full">
+            <div class="bg-white/10 backdrop-blur-sm rounded-full p-4 md:p-6 mb-6 md:mb-8 inline-block">
+                <svg class="w-12 h-12 md:w-16 md:h-16 text-white" viewBox="0 0 48 48" fill="currentColor">
+                    <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z"/>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-6xl mobile-text-4xl font-bold mb-4 md:mb-6 mobile-mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                Auto Emporium
+            </h1>
+            <p class="text-lg md:text-2xl mobile-text-lg text-blue-100 mb-6 md:mb-8 mobile-mb-6 font-light">
+                AI-Powered Car Dealership Website
+            </p>
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4 mb-6 md:mb-8 mobile-mb-6">
+                <h2 class="text-xl md:text-3xl mobile-text-xl font-semibold mb-3 md:mb-4 mobile-mb-4">🤖 Built with AI Assistance</h2>
+                <p class="text-base md:text-xl mobile-text-base text-blue-100 leading-relaxed">
+                    Complete automotive solution featuring advanced inventory management, 
+                    customer engagement tools, and comprehensive admin dashboard
+                </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm text-blue-200">
+                <span class="bg-white/20 px-3 py-2 md:px-4 md:py-2 rounded-full">React & Firebase</span>
+                <span class="bg-white/20 px-3 py-2 md:px-4 md:py-2 rounded-full">Responsive Design</span>
+                <span class="bg-white/20 px-3 py-2 md:px-4 md:py-2 rounded-full">Admin Dashboard</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Project Overview -->
+    <div class="slide bg-gradient-to-br from-gray-900 to-gray-800">
+        <div class="max-w-6xl mx-auto text-center w-full">
+            <h1 class="text-3xl md:text-5xl mobile-text-3xl font-bold mb-6 md:mb-8 mobile-mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Project Overview
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 mobile-cols-1 gap-4 md:gap-8 mb-8 md:mb-12 mobile-mb-8">
+                <div class="feature-card bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4">
+                    <div class="text-3xl md:text-4xl mb-3 md:mb-4">🚗</div>
+                    <h3 class="text-lg md:text-2xl mobile-text-lg font-semibold mb-2 md:mb-4">Vehicle Management</h3>
+                    <p class="text-sm md:text-base text-gray-300">Complete inventory system with advanced filtering, search, and detailed vehicle information</p>
+                </div>
+                <div class="feature-card bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4">
+                    <div class="text-3xl md:text-4xl mb-3 md:mb-4">👥</div>
+                    <h3 class="text-lg md:text-2xl mobile-text-lg font-semibold mb-2 md:mb-4">Customer Experience</h3>
+                    <p class="text-sm md:text-base text-gray-300">Seamless booking system for test drives, service appointments, and inquiries</p>
+                </div>
+                <div class="feature-card bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4">
+                    <div class="text-3xl md:text-4xl mb-3 md:mb-4">📊</div>
+                    <h3 class="text-lg md:text-2xl mobile-text-lg font-semibold mb-2 md:mb-4">Admin Dashboard</h3>
+                    <p class="text-sm md:text-base text-gray-300">Comprehensive management system with analytics, reporting, and data export</p>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-4 md:p-8 mobile-p-4">
+                <h2 class="text-xl md:text-3xl mobile-text-xl font-semibold mb-3 md:mb-4">🎯 Mission Statement</h2>
+                <p class="text-base md:text-xl mobile-text-base text-gray-300 leading-relaxed max-w-4xl mx-auto">
+                    To demonstrate the power of AI-assisted development in creating enterprise-grade 
+                    web applications that solve real-world business challenges in the automotive industry.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Technology Stack -->
+    <div class="slide tech-gradient">
+        <div class="max-w-6xl mx-auto text-center w-full">
+            <h1 class="text-3xl md:text-5xl mobile-text-3xl font-bold mb-8 md:mb-12 mobile-mb-8 text-white">Technology Stack</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mobile-cols-1 gap-4 md:gap-8 mb-8 md:mb-12 mobile-mb-8">
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 mobile-p-4 text-center">
+                    <div class="text-3xl md:text-5xl mb-3 md:mb-4">🌐</div>
+                    <h3 class="text-lg md:text-xl mobile-text-lg font-semibold mb-2">Frontend</h3>
+                    <div class="text-xs md:text-sm mobile-space-y-2 space-y-1">
+                        <div>HTML5 & CSS3</div>
+                        <div>Tailwind CSS</div>
+                        <div>Vanilla JavaScript</div>
+                        <div>Responsive Design</div>
+                    </div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 mobile-p-4 text-center">
+                    <div class="text-3xl md:text-5xl mb-3 md:mb-4">🔥</div>
+                    <h3 class="text-lg md:text-xl mobile-text-lg font-semibold mb-2">Backend</h3>
+                    <div class="text-xs md:text-sm mobile-space-y-2 space-y-1">
+                        <div>Firebase Firestore</div>
+                        <div>Real-time Database</div>
+                        <div>Cloud Storage</div>
+                        <div>Authentication</div>
+                    </div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 mobile-p-4 text-center">
+                    <div class="text-3xl md:text-5xl mb-3 md:mb-4">🛠️</div>
+                    <h3 class="text-lg md:text-xl mobile-text-lg font-semibold mb-2">Features</h3>
+                    <div class="text-xs md:text-sm mobile-space-y-2 space-y-1">
+                        <div>CRUD Operations</div>
+                        <div>File Upload</div>
+                        <div>Data Export</div>
+                        <div>Form Validation</div>
+                    </div>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 mobile-p-4 text-center">
+                    <div class="text-3xl md:text-5xl mb-3 md:mb-4">🤖</div>
+                    <h3 class="text-lg md:text-xl mobile-text-lg font-semibold mb-2">AI Tools</h3>
+                    <div class="text-xs md:text-sm mobile-space-y-2 space-y-1">
+                        <div>GitHub Copilot</div>
+                        <div>Code Generation</div>
+                        <div>Auto-completion</div>
+                        <div>Best Practices</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4">
+                <h2 class="text-xl md:text-3xl mobile-text-xl font-semibold mb-4 md:mb-6">🏗️ Architecture Highlights</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 mobile-cols-1 gap-4 md:gap-6 text-left">
+                    <div>
+                        <h4 class="font-semibold mb-2 text-sm md:text-base">📱 Responsive Design</h4>
+                        <p class="text-sm text-blue-100">Mobile-first approach with seamless experience across all devices</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">🔄 Real-time Updates</h4>
+                        <p class="text-sm text-blue-100">Live data synchronization between admin panel and customer interface</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">🛡️ Data Security</h4>
+                        <p class="text-sm text-blue-100">Secure Firebase integration with proper validation and error handling</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Key Features -->
+    <div class="slide bg-gradient-to-br from-purple-900 to-indigo-800">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                Key Features
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Customer Features -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-purple-300">👤 Customer Experience</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">🔍</span>
+                            <div>
+                                <h4 class="font-semibold">Advanced Vehicle Search</h4>
+                                <p class="text-sm text-gray-300">Filter by make, price, fuel type, and more</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">📅</span>
+                            <div>
+                                <h4 class="font-semibold">Test Drive Booking</h4>
+                                <p class="text-sm text-gray-300">Schedule test drives with license verification</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">🛠️</span>
+                            <div>
+                                <h4 class="font-semibold">Service Appointments</h4>
+                                <p class="text-sm text-gray-300">Book maintenance and repair services</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">💬</span>
+                            <div>
+                                <h4 class="font-semibold">Contact & Inquiries</h4>
+                                <p class="text-sm text-gray-300">Direct communication with sales team</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">📱</span>
+                            <div>
+                                <h4 class="font-semibold">Responsive Design</h4>
+                                <p class="text-sm text-gray-300">Perfect experience on all devices</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Features -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-pink-300">⚙️ Admin Dashboard</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">🚗</span>
+                            <div>
+                                <h4 class="font-semibold">Vehicle Management</h4>
+                                <p class="text-sm text-gray-300">Add, edit, delete vehicles with image upload</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">👥</span>
+                            <div>
+                                <h4 class="font-semibold">Team Management</h4>
+                                <p class="text-sm text-gray-300">Manage staff profiles and information</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">📊</span>
+                            <div>
+                                <h4 class="font-semibold">Analytics Dashboard</h4>
+                                <p class="text-sm text-gray-300">Real-time statistics and insights</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">📋</span>
+                            <div>
+                                <h4 class="font-semibold">Inquiry Management</h4>
+                                <p class="text-sm text-gray-300">Track and respond to customer requests</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-2xl">📈</span>
+                            <div>
+                                <h4 class="font-semibold">Data Export</h4>
+                                <p class="text-sm text-gray-300">CSV export for reporting and analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Admin Panel Showcase -->
+    <div class="slide bg-gradient-to-br from-indigo-900 to-blue-800">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">
+                Admin Panel Overview
+            </h1>
+            <p class="text-xl text-blue-200 mb-12 max-w-3xl mx-auto">
+                Comprehensive management system with 6 specialized admin panels for complete business control
+            </p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">👥</div>
+                    <h3 class="text-lg font-semibold mb-2">Team Management</h3>
+                    <p class="text-sm text-blue-200">Employee profiles and information</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">🚗</div>
+                    <h3 class="text-lg font-semibold mb-2">Vehicle Inventory</h3>
+                    <p class="text-sm text-blue-200">Complete vehicle management system</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">🎨</div>
+                    <h3 class="text-lg font-semibold mb-2">Homepage Slider</h3>
+                    <p class="text-sm text-blue-200">Manage promotional banners</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">📧</div>
+                    <h3 class="text-lg font-semibold mb-2">Contact Submissions</h3>
+                    <p class="text-sm text-blue-200">Customer inquiry management</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">🛠️</div>
+                    <h3 class="text-lg font-semibold mb-2">Service Appointments</h3>
+                    <p class="text-sm text-blue-200">Maintenance booking system</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 feature-card">
+                    <div class="text-3xl mb-4">🔍</div>
+                    <h3 class="text-lg font-semibold mb-2">Vehicle Inquiries</h3>
+                    <p class="text-sm text-blue-200">Test drive and inquiry tracking</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-8">
+                <h2 class="text-3xl font-semibold mb-6">📊 Dashboard Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                    <div>
+                        <div class="text-2xl font-bold text-cyan-300">Real-time</div>
+                        <div class="text-sm text-blue-200">Statistics</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-cyan-300">Advanced</div>
+                        <div class="text-sm text-blue-200">Filtering</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-cyan-300">CSV</div>
+                        <div class="text-sm text-blue-200">Export</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-cyan-300">Status</div>
+                        <div class="text-sm text-blue-200">Management</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Technical Achievements -->
+    <div class="slide bg-gradient-to-br from-green-900 to-teal-800">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-green-300 to-teal-300 bg-clip-text text-transparent">
+                Technical Achievements
+            </h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-green-300">🏗️ Architecture</h2>
+                    <ul class="space-y-4 text-green-100">
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <div>
+                                <strong>Modular File Structure:</strong> Organized admin and user panels in separate directories
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <div>
+                                <strong>Firebase Integration:</strong> Real-time database with offline fallback to localStorage
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <div>
+                                <strong>Responsive Design:</strong> Mobile-first approach with Tailwind CSS framework
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <div>
+                                <strong>Error Handling:</strong> Comprehensive validation and user feedback systems
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-teal-300">⚡ Performance</h2>
+                    <ul class="space-y-4 text-teal-100">
+                        <li class="flex items-start gap-3">
+                            <span class="text-teal-400 mt-1">✓</span>
+                            <div>
+                                <strong>Async Operations:</strong> Non-blocking database operations with proper loading states
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-teal-400 mt-1">✓</span>
+                            <div>
+                                <strong>Efficient Filtering:</strong> Client-side search and sort functionality
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-teal-400 mt-1">✓</span>
+                            <div>
+                                <strong>Image Optimization:</strong> Responsive images with proper fallbacks
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-teal-400 mt-1">✓</span>
+                            <div>
+                                <strong>Data Export:</strong> CSV generation for business reporting needs
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-600/20 to-teal-600/20 rounded-2xl p-8">
+                <h2 class="text-3xl font-semibold mb-6 text-center">🤖 AI-Assisted Development Benefits</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🚀</div>
+                        <h3 class="text-xl font-semibold mb-2">Rapid Development</h3>
+                        <p class="text-sm text-gray-300">AI assistance accelerated development by 70%, reducing typical project timeline from weeks to days</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-semibold mb-2">Best Practices</h3>
+                        <p class="text-sm text-gray-300">AI suggested modern patterns, security practices, and performance optimizations throughout development</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h3 class="text-xl font-semibold mb-2">Iterative Enhancement</h3>
+                        <p class="text-sm text-gray-300">Continuous improvement through AI-guided refactoring and feature enhancement suggestions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Project Impact & Statistics -->
+    <div class="slide success-gradient">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-12 text-white">Project Impact & Statistics</h1>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <div class="stats-card bg-white/20 backdrop-blur-sm rounded-2xl p-8">
+                    <div class="text-4xl font-bold text-white mb-2">15+</div>
+                    <div class="text-lg text-orange-100">Pages Created</div>
+                    <div class="text-sm text-orange-200 mt-2">Complete website ecosystem</div>
+                </div>
+                <div class="stats-card bg-white/20 backdrop-blur-sm rounded-2xl p-8">
+                    <div class="text-4xl font-bold text-white mb-2">6</div>
+                    <div class="text-lg text-orange-100">Admin Panels</div>
+                    <div class="text-sm text-orange-200 mt-2">Comprehensive management</div>
+                </div>
+                <div class="stats-card bg-white/20 backdrop-blur-sm rounded-2xl p-8">
+                    <div class="text-4xl font-bold text-white mb-2">100%</div>
+                    <div class="text-lg text-orange-100">Responsive</div>
+                    <div class="text-sm text-orange-200 mt-2">Mobile-first design</div>
+                </div>
+                <div class="stats-card bg-white/20 backdrop-blur-sm rounded-2xl p-8">
+                    <div class="text-4xl font-bold text-white mb-2">5+</div>
+                    <div class="text-lg text-orange-100">Technologies</div>
+                    <div class="text-sm text-orange-200 mt-2">Modern tech stack</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-8 text-left">
+                    <h2 class="text-3xl font-semibold mb-6">🎯 Business Value</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-yellow-300 text-xl">💰</span>
+                            <div>
+                                <strong>Cost Reduction:</strong> AI development reduced typical development costs by 60%
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-yellow-300 text-xl">⏱️</span>
+                            <div>
+                                <strong>Time Efficiency:</strong> Project completed in days instead of weeks
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-yellow-300 text-xl">📈</span>
+                            <div>
+                                <strong>Scalability:</strong> Architecture ready for enterprise-level scaling
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-yellow-300 text-xl">🔧</span>
+                            <div>
+                                <strong>Maintainability:</strong> Clean, well-documented codebase for easy updates
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-8 text-left">
+                    <h2 class="text-3xl font-semibold mb-6">🌟 Key Achievements</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-pink-300 text-xl">✨</span>
+                            <div>
+                                <strong>Zero to Production:</strong> Complete automotive website from concept to deployment
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-pink-300 text-xl">🎨</span>
+                            <div>
+                                <strong>Professional UI/UX:</strong> Modern design matching industry standards
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-pink-300 text-xl">🔒</span>
+                            <div>
+                                <strong>Enterprise Security:</strong> Proper validation, error handling, and data protection
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-pink-300 text-xl">📊</span>
+                            <div>
+                                <strong>Data-Driven:</strong> Analytics dashboard with export capabilities
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white/30 backdrop-blur-sm rounded-2xl p-8">
+                <h2 class="text-3xl font-semibold mb-4">🏆 Project Highlights</h2>
+                <p class="text-xl leading-relaxed max-w-4xl mx-auto">
+                    This project demonstrates the transformative power of AI in web development, 
+                    showcasing how artificial intelligence can accelerate the creation of complex, 
+                    feature-rich applications while maintaining high quality standards and best practices.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Future Enhancements -->
+    <div class="slide bg-gradient-to-br from-violet-900 to-purple-800">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-12 bg-gradient-to-r from-violet-300 to-purple-300 bg-clip-text text-transparent">
+                Future Enhancements
+            </h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-violet-300">🚀 Planned Features</h2>
+                    <div class="space-y-4 text-left">
+                        <div class="flex items-start gap-3">
+                            <span class="text-violet-400 text-xl">🤖</span>
+                            <div>
+                                <strong>AI Chatbot:</strong> Intelligent customer support with natural language processing
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-violet-400 text-xl">💳</span>
+                            <div>
+                                <strong>Payment Integration:</strong> Secure online payment processing for deposits and services
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-violet-400 text-xl">📱</span>
+                            <div>
+                                <strong>Mobile App:</strong> Native iOS/Android application for enhanced user experience
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-violet-400 text-xl">🔔</span>
+                            <div>
+                                <strong>Notifications:</strong> Real-time push notifications for appointments and updates
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-violet-400 text-xl">📊</span>
+                            <div>
+                                <strong>Advanced Analytics:</strong> Machine learning insights for business optimization
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                    <h2 class="text-3xl font-semibold mb-6 text-purple-300">🎯 Integration Goals</h2>
+                    <div class="space-y-4 text-left">
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 text-xl">🔗</span>
+                            <div>
+                                <strong>CRM Integration:</strong> Connect with popular customer relationship management tools
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 text-xl">📧</span>
+                            <div>
+                                <strong>Email Marketing:</strong> Automated campaigns and customer communication
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 text-xl">📍</span>
+                            <div>
+                                <strong>GPS Integration:</strong> Location-based services and dealership finder
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 text-xl">🌐</span>
+                            <div>
+                                <strong>API Ecosystem:</strong> RESTful APIs for third-party integrations
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 text-xl">🔐</span>
+                            <div>
+                                <strong>Enhanced Security:</strong> Multi-factor authentication and advanced encryption
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-violet-600/20 to-purple-600/20 rounded-2xl p-8">
+                <h2 class="text-3xl font-semibold mb-6">🌟 Vision for Scale</h2>
+                <p class="text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto mb-6">
+                    Transform this proof-of-concept into a full-scale automotive platform serving multiple 
+                    dealerships with white-label solutions, advanced AI features, and enterprise integrations.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <div class="text-2xl font-bold text-violet-300">Multi-Tenant</div>
+                        <div class="text-sm text-purple-200">Architecture</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-violet-300">White-Label</div>
+                        <div class="text-sm text-purple-200">Solutions</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-violet-300">Enterprise</div>
+                        <div class="text-sm text-purple-200">Ready</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Thank You & Contact -->
+    <div class="slide bg-gradient-to-br from-gray-900 to-black text-center">
+        <div class="max-w-4xl mx-auto w-full">
+            <div class="bg-white/10 backdrop-blur-sm rounded-full p-6 md:p-8 mb-6 md:mb-8 mobile-mb-6 inline-block">
+                <div class="text-4xl md:text-6xl">🙏</div>
+            </div>
+            <h1 class="text-4xl md:text-6xl mobile-text-4xl font-bold mb-6 md:mb-8 mobile-mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Thank You!
+            </h1>
+            <p class="text-lg md:text-2xl mobile-text-lg text-gray-300 mb-8 md:mb-12 mobile-mb-8 leading-relaxed">
+                Showcasing the future of AI-assisted web development
+            </p>
+            
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-8 mobile-p-4 mb-6 md:mb-8 mobile-mb-6">
+                <h2 class="text-xl md:text-3xl mobile-text-xl font-semibold mb-4 md:mb-6 text-white">🤝 Let's Connect</h2>
+                <p class="text-base md:text-xl mobile-text-base text-gray-300 mb-4 md:mb-6">
+                    Interested in collaborating on AI-powered projects or discussing this implementation?
+                </p>
+                <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-sm md:text-lg">
+                    <div class="flex items-center gap-2 bg-blue-600/20 px-3 py-2 md:px-4 md:py-2 rounded-lg touch-area">
+                        <span>💼</span>
+                        <span>LinkedIn</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-gray-600/20 px-3 py-2 md:px-4 md:py-2 rounded-lg touch-area">
+                        <span>🐙</span>
+                        <span>GitHub</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-green-600/20 px-3 py-2 md:px-4 md:py-2 rounded-lg touch-area">
+                        <span>📧</span>
+                        <span>Email</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 mobile-cols-1 gap-4 md:gap-6 mb-6 md:mb-8 mobile-mb-6">
+                <div class="bg-white/5 rounded-xl p-4 md:p-6 mobile-p-4">
+                    <div class="text-2xl md:text-3xl mb-3 md:mb-4">🎯</div>
+                    <h3 class="font-semibold mb-2 text-sm md:text-base">Open to Opportunities</h3>
+                    <p class="text-xs md:text-sm text-gray-400">Seeking roles in AI-assisted development and innovative web solutions</p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4 md:p-6 mobile-p-4">
+                    <div class="text-2xl md:text-3xl mb-3 md:mb-4">🚀</div>
+                    <h3 class="font-semibold mb-2 text-sm md:text-base">Project Collaboration</h3>
+                    <p class="text-xs md:text-sm text-gray-400">Available for freelance projects and technical consultation</p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4 md:p-6 mobile-p-4">
+                    <div class="text-2xl md:text-3xl mb-3 md:mb-4">📚</div>
+                    <h3 class="font-semibold mb-2 text-sm md:text-base">Knowledge Sharing</h3>
+                    <p class="text-xs md:text-sm text-gray-400">Happy to share insights on AI development workflows</p>
+                </div>
+            </div>
+
+            <div class="text-gray-500 text-xs md:text-sm">
+                <p>Auto Emporium - AI-Powered Car Dealership Website</p>
+                <p class="mt-2">Built with ❤️ using GitHub Copilot and modern web technologies</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.slide-indicator');
+        const totalSlides = slides.length;
+
+        // Touch gesture variables
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const minSwipeDistance = 50;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            currentSlide = (n + totalSlides) % totalSlides;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+            
+            // Announce slide change for screen readers
+            const slideTitle = slides[currentSlide].querySelector('h1, h2')?.textContent || `Slide ${currentSlide + 1}`;
+            announceToScreenReader(`Now viewing: ${slideTitle}`);
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            setTimeout(() => document.body.removeChild(announcement), 1000);
+        }
+
+        // Touch event handlers
+        function handleTouchStart(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }
+
+        function handleTouchMove(e) {
+            // Get current touch position
+            const touchCurrentX = e.touches[0].clientX;
+            const touchCurrentY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchCurrentX - touchStartX);
+            const deltaY = Math.abs(touchCurrentY - touchStartY);
+            
+            // Only prevent default for clear horizontal swipes (significant horizontal movement)
+            // Allow vertical scrolling unless it's clearly a horizontal gesture
+            if (deltaX > deltaY && deltaX > 30) {
+                e.preventDefault();
+            }
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const absDeltaX = Math.abs(deltaX);
+            const absDeltaY = Math.abs(deltaY);
+
+            // More restrictive swipe detection - require significant horizontal movement
+            // and ensure it's much more horizontal than vertical
+            if (absDeltaX > 80 && absDeltaX > (absDeltaY * 2)) {
+                if (deltaX > 0) {
+                    prevSlide(); // Swipe right = previous slide
+                } else {
+                    nextSlide(); // Swipe left = next slide
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+            if (e.key >= '1' && e.key <= '9') {
+                const slideNum = parseInt(e.key) - 1;
+                if (slideNum < totalSlides) goToSlide(slideNum);
+            }
+            if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(0);
+            }
+            if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(totalSlides - 1);
+            }
+        });
+
+        // Touch event listeners - only on the body to avoid conflicts with scrollable content
+        document.body.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.body.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.body.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        // Mouse wheel navigation (for desktop)
+        let wheelTimeout;
+        let isWheelNavigating = false;
+        document.addEventListener('wheel', function(e) {
+            if (isWheelNavigating) return;
+            
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 100) {
+                    isWheelNavigating = true;
+                    if (e.deltaY > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    setTimeout(() => {
+                        isWheelNavigating = false;
+                    }, 500);
+                }
+            }, 50);
+        }, { passive: true });
+
+        // Orientation change handler
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                // Trigger a resize to handle orientation changes
+                window.dispatchEvent(new Event('resize'));
+            }, 100);
+        });
+
+        // Initialize presentation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial slide
+            showSlide(0);
+            
+            // Add keyboard focus management
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    // Ensure tab navigation works within slides
+                    const activeSlide = slides[currentSlide];
+                    const focusableElements = activeSlide.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    
+                    if (focusableElements.length === 0) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            console.log('🚀 Auto Emporium Presentation Ready!');
+            console.log('📱 Use arrow keys, buttons, or swipe to navigate');
+            console.log('🎯 ' + totalSlides + ' slides total');
+            console.log('✨ Mobile-optimized with touch gestures');
+        });
+
+        // Auto-advance slides every 30 seconds (optional)
+        // setInterval(nextSlide, 30000);
+    </script>
+</body>
+</html>

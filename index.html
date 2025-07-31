@@ -1,0 +1,2128 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+
+    <title>Auto Emporium - Premium Cars, Quality Service, Unbeatable Prices</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Auto Emporium - Your trusted car dealership offering premium quality vehicles, expert automotive services, and competitive prices. Browse our featured cars and schedule a test drive today.">
+    <meta name="keywords" content="car dealership, auto sales, used cars, new cars, automotive service, test drive, car financing, vehicle inspection">
+    <meta name="author" content="Auto Emporium">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Auto Emporium - Premium Cars, Quality Service">
+    <meta property="og:description" content="Discover premium quality vehicles at Auto Emporium. Expert service, competitive prices, and unbeatable customer satisfaction.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://autoemporium.com">
+    <meta property="og:image" content="https://autoemporium.com/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Auto Emporium - Premium Cars, Quality Service">
+    <meta name="twitter:description" content="Discover premium quality vehicles at Auto Emporium. Expert service, competitive prices, and unbeatable customer satisfaction.">
+    <meta name="twitter:image" content="https://autoemporium.com/twitter-image.jpg">
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoDealer",
+      "name": "Auto Emporium",
+      "description": "Premium car dealership offering quality vehicles and expert automotive services",
+      "url": "https://autoemporium.com",
+      "telephone": "+1-555-AUTO-DEAL",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Auto Plaza Drive",
+        "addressLocality": "Car City",
+        "addressRegion": "CA",
+        "postalCode": "90210",
+        "addressCountry": "US"
+      },
+      "openingHours": "Mo-Sa 09:00-18:00, Su 10:00-16:00",
+      "priceRange": "$$",
+      "areaServed": "United States"
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#111a22] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#243647] px-10 py-3">
+          <div class="flex items-center gap-4 text-white">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Auto Emporium</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-white text-sm font-medium leading-normal" href="#">Home</a>
+              <a class="text-white text-sm font-medium leading-normal" href="user/vehicle-details.html">All Vehicles</a>
+              <a class="text-white text-sm font-medium leading-normal" href="#services">Services</a>
+              <a class="text-white text-sm font-medium leading-normal" href="#about">About Us</a>
+              <a class="text-white text-sm font-medium leading-normal" href="#contact">Contact</a>
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#243647] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+              >
+                <div class="text-white" data-icon="MagnifyingGlass" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                    ></path>
+                  </svg>
+                </div>
+              </button>
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#243647] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+              >
+                <div class="text-white" data-icon="UserCircle" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"
+                    ></path>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <!-- Dynamic Hero Slider -->
+            <div class="@container">
+              <div class="@[480px]:p-4">
+                <div id="hero-slider" class="relative overflow-hidden rounded-xl">
+                  <!-- Slide Container -->
+                  <div id="slides-container" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Default slide while loading -->
+                    <div class="slide w-full flex-shrink-0 flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 items-center justify-center p-4"
+                         style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAOAcDNFIIA91wqFQ5-5mjWyuSwJK2w3QAt94-gwTYe3fwX-1kSqFR-TzPoiIkKPkz8qktcbvRB0CXukxTx-upNQ57aSCqQWvSMR4F-bGlB6hN2EWCoJLoQiJ_8CZ0j4wOgVA2xrlPkxYMpDO6aYcQKFrnsS-M7ND0JoUDqESAyOGkonVkoCRJThbj_E18vwM1s5Nq8CRf5VwWd8T7mvrAFy1M5exmsgkC-PNa89V2-u3KHzz0__Fj57FMbs3FR2YVP2yWxhJKE4I0V");'>
+                      <div class="flex flex-col gap-2 text-center">
+                        <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                          Loading Slides...
+                        </h1>
+                        <h2 class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                          Please wait while we load the latest content.
+                        </h2>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Navigation Dots -->
+                  <div id="slider-dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                    <button class="slider-dot w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-colors" data-slide="0"></button>
+                  </div>
+                  
+                  <!-- Navigation Arrows -->
+                  <button id="prev-slide" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                  </button>
+                  <button id="next-slide" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Navigation -->
+            <div class="bg-[#243647] rounded-xl p-6 mb-8">
+              <h3 class="text-white text-xl font-bold mb-4 text-center">Explore Our Vehicle Collection</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="user/vehicle-details.html" class="bg-[#111a22] p-4 rounded-lg hover:bg-[#1473cc] transition-colors group text-center">
+                  <div class="text-2xl mb-2">🚗</div>
+                  <h4 class="text-white font-semibold mb-1">All Vehicles</h4>
+                  <p class="text-[#92aec8] text-sm group-hover:text-white">Browse our complete inventory</p>
+                </a>
+                <a href="user/vehicle-details.html?filter=new" class="bg-[#111a22] p-4 rounded-lg hover:bg-[#1473cc] transition-colors group text-center">
+                  <div class="text-2xl mb-2">✨</div>
+                  <h4 class="text-white font-semibold mb-1">New Arrivals</h4>
+                  <p class="text-[#92aec8] text-sm group-hover:text-white">Latest additions to our lot</p>
+                </a>
+                <a href="user/vehicle-details.html?filter=featured" class="bg-[#111a22] p-4 rounded-lg hover:bg-[#1473cc] transition-colors group text-center">
+                  <div class="text-2xl mb-2">⭐</div>
+                  <h4 class="text-white font-semibold mb-1">Featured Deals</h4>
+                  <p class="text-[#92aec8] text-sm group-hover:text-white">Special offers and promotions</p>
+                </a>
+              </div>
+            </div>
+            
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Featured Vehicles</h2>
+            <div id="vehicles-container" class="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+              <div class="flex items-stretch p-4 gap-3">
+                <!-- Featured vehicles will be loaded dynamically from Firebase -->
+                <div class="flex items-center justify-center p-8 min-w-60">
+                  <div class="text-[#92aec8] text-base">Loading featured vehicles...</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- View All Vehicles Button -->
+            <div class="flex justify-center px-4 pb-5">
+              <a href="user/vehicle-details.html" class="bg-[#1473cc] text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                View All Vehicles
+              </a>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Customer Testimonials</h2>
+            <div class="p-4">
+              <div
+                class="bg-cover bg-center flex flex-col items-stretch justify-end rounded-xl pt-[132px]"
+                style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBNTX6QT2t3KRiAGGXygZ56jj-hHGDYEFSZUkyTMDmpMmeB88XZPkC-t6tA8MCj2zyOy2H7yLKc-5MSsO-09ethQupQ0vhosOM7KBmEUO05SF1sxkLgJLxdj0UrITCzvyMUAAk7DNe7-vW5ILYCmN1EYRzxRALFOZH3g8HFtIekJjvZ4G1NGbNai78QIa2F11rfE5N3qsfK_BiJaXSDmuXosH6DSAaCeK4PPGjN6ateUs-bwbPKBsXPT53NAKBX9_z6HBLMNZLnUdGv");'
+              >
+                <div class="flex w-full items-end justify-between gap-4 p-4">
+                  <div class="flex max-w-[440px] flex-1 flex-col gap-1">
+                    <p class="text-white tracking-light text-2xl font-bold leading-tight max-w-[440px]">
+                      "I had a fantastic experience buying my new car from Auto Emporium. The staff was knowledgeable and helpful, and I got a great deal on my purchase."
+                    </p>
+                    <p class="text-white text-base font-medium leading-normal">Ethan Harper</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div
+                class="bg-cover bg-center flex flex-col items-stretch justify-end rounded-xl pt-[132px]"
+                style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAsX3DSlCMf78Gep2El6-kry9NCok1yOOmtPhJjqIpFAHGM2YjVfouoK-zGre-_tqYPmq-6Uol0tIoq0On0CeHMGXHWm4Wm4wcr5RYlUyVYxqkgCRwoxjcP3ncFevo72mCPHgvZZ3yjORz5hDpgZ7pXOGiCO4XBVwR3vFegdbdp6ycdqQjdnKWzb9JRpI42jluoUWdeliDWxzISoZ3LKmfQ3OByhTUvjFksVOmsAFWmlLgRYHcfVvUe24enuUQR2ayf5T_bgUyC_hwi");'
+              >
+                <div class="flex w-full items-end justify-between gap-4 p-4">
+                  <div class="flex max-w-[440px] flex-1 flex-col gap-1">
+                    <p class="text-white tracking-light text-2xl font-bold leading-tight max-w-[440px]">
+                      "The service department at Auto Emporium is top-notch. They took great care of my car and kept me informed throughout the process."
+                    </p>
+                    <p class="text-white text-base font-medium leading-normal">Sophia Bennett</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Our Team</h2>
+            <div id="team-container" class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              <!-- Team members will be loaded dynamically from Firebase -->
+              <div class="flex items-center justify-center p-8">
+                <div class="text-[#92aec8] text-base">Loading team members...</div>
+              </div>
+            </div>
+
+            <!-- Services Section -->
+            <section id="services" class="py-16 px-4">
+              <div class="max-w-6xl mx-auto">
+                <h2 class="text-white text-[32px] font-bold leading-tight tracking-[-0.015em] text-center mb-8">Our Services</h2>
+                <p class="text-[#92aec8] text-lg text-center mb-12 max-w-3xl mx-auto">
+                  We provide comprehensive automotive services to keep your vehicle running at its best. From routine maintenance to major repairs, our certified technicians have you covered.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <!-- Service 1: Vehicle Sales -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M240,104H229.2L201.42,41.5A16,16,0,0,0,186.8,32H69.2a16,16,0,0,0-14.62,9.5L26.8,104H16a8,8,0,0,0,0,16h8v80a16,16,0,0,0,16,16H64a16,16,0,0,0,16-16V184h96v16a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16V120h8a8,8,0,0,0,0-16ZM69.2,48H186.8l24,56H45.2ZM64,200H40V120H64Zm128,0V120h24v80Zm-16-32a16,16,0,1,1-16-16A16,16,0,0,1,176,168ZM96,152a16,16,0,1,1-16,16A16,16,0,0,1,96,152Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Vehicle Sales</h3>
+                    <p class="text-[#92aec8] mb-4">Browse our extensive inventory of quality pre-owned vehicles. Each car is thoroughly inspected and comes with a detailed history report.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• Multi-point inspection</li>
+                      <li>• Vehicle history reports</li>
+                      <li>• Financing options available</li>
+                      <li>• Trade-in evaluations</li>
+                    </ul>
+                  </div>
+
+                  <!-- Service 2: Maintenance & Repair -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M224,144v64a8,8,0,0,1-16,0V152H174.63l-35.32,35.31a8,8,0,0,1-11.32,0L92.68,152H48v56a8,8,0,0,1-16,0V144a8,8,0,0,1,2.34-5.66L64,108.68V88a8,8,0,0,1,8-8H184a8,8,0,0,1,8,8v20.68l29.66,29.66A8,8,0,0,1,224,144ZM80,96V88a8,8,0,0,1,8-8h80a8,8,0,0,1,8,8v8H80Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Maintenance & Repair</h3>
+                    <p class="text-[#92aec8] mb-4">Keep your vehicle running smoothly with our comprehensive maintenance and repair services performed by certified technicians.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• Oil changes & tune-ups</li>
+                      <li>• Brake service & repair</li>
+                      <li>• Engine diagnostics</li>
+                      <li>• Transmission service</li>
+                    </ul>
+                  </div>
+
+                  <!-- Service 3: Financing -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM32,88H224v16H32ZM32,64H224V72H32ZM224,192H32V120H224v72ZM168,152a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H176A8,8,0,0,1,168,152Zm0,24a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H176A8,8,0,0,1,168,176Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Financing Solutions</h3>
+                    <p class="text-[#92aec8] mb-4">We work with multiple lenders to secure the best financing options for your vehicle purchase, regardless of your credit situation.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• Competitive interest rates</li>
+                      <li>• Bad credit financing</li>
+                      <li>• Quick approval process</li>
+                      <li>• Flexible payment terms</li>
+                    </ul>
+                  </div>
+
+                  <!-- Service 4: Parts & Accessories -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M71.68,97.22,34.74,128l36.94,30.78a8,8,0,1,1-10.22,12.44l-40-33.33a8,8,0,0,1,0-12.44l40-33.33a8,8,0,0,1,10.22,12.44Zm152,33.33-40-33.33a8,8,0,1,0-10.22,12.44L210.26,128l-36.94,30.78a8,8,0,1,0,10.22,12.44l40-33.33a8,8,0,0,0,0-12.44ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Parts & Accessories</h3>
+                    <p class="text-[#92aec8] mb-4">Genuine OEM parts and quality aftermarket accessories to enhance and maintain your vehicle's performance and appearance.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• OEM replacement parts</li>
+                      <li>• Performance upgrades</li>
+                      <li>• Interior accessories</li>
+                      <li>• Installation service</li>
+                    </ul>
+                  </div>
+
+                  <!-- Service 5: Inspection Services -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M243.31,136,144,36.69A15.86,15.86,0,0,0,132.69,32H40A8,8,0,0,0,32,40v92.69A15.86,15.86,0,0,0,36.69,144L136,243.31a16,16,0,0,0,22.63,0l84.68-84.68a16,16,0,0,0,0-22.63ZM147.31,232,48,132.69V48h84.69L232,147.31ZM96,84A12,12,0,1,1,84,72,12,12,0,0,1,96,84Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Inspection Services</h3>
+                    <p class="text-[#92aec8] mb-4">Professional vehicle inspections for peace of mind, whether you're buying, selling, or maintaining your vehicle.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• Pre-purchase inspections</li>
+                      <li>• Safety inspections</li>
+                      <li>• Emissions testing</li>
+                      <li>• Detailed reports</li>
+                    </ul>
+                  </div>
+
+                  <!-- Service 6: Emergency Services -->
+                  <div class="bg-[#243647] rounded-xl p-6 hover:bg-[#2a3f54] transition-colors duration-300">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h8V128a8,8,0,0,1,0-16h8a8,8,0,0,1,8,8v48h8A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Emergency Services</h3>
+                    <p class="text-[#92aec8] mb-4">24/7 roadside assistance and emergency services to get you back on the road when you need it most.</p>
+                    <ul class="text-[#92aec8] space-y-2">
+                      <li>• 24/7 roadside assistance</li>
+                      <li>• Towing services</li>
+                      <li>• Jump-start service</li>
+                      <li>• Lockout assistance</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="text-center mt-12">
+                  <button class="bg-[#1473cc] hover:bg-[#0f5ba8] text-white font-bold py-3 px-8 rounded-full transition-colors duration-300">
+                    Schedule Service
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- About Us Section -->
+            <section id="about" class="py-16 px-4 bg-[#1c2d3e]">
+              <div class="max-w-6xl mx-auto">
+                <h2 class="text-white text-[32px] font-bold leading-tight tracking-[-0.015em] text-center mb-8">About Auto Emporium</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                  <div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Our Story</h3>
+                    <p class="text-[#92aec8] text-lg mb-6">
+                      Founded in 2010, Auto Emporium has been serving the community with quality vehicles and exceptional service for over a decade. What started as a small family business has grown into one of the region's most trusted automotive dealerships.
+                    </p>
+                    <p class="text-[#92aec8] text-lg mb-6">
+                      Our commitment to transparency, quality, and customer satisfaction has earned us thousands of satisfied customers and a reputation for excellence in the automotive industry.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                      <div class="text-center">
+                        <div class="text-[#1473cc] text-3xl font-bold">500+</div>
+                        <div class="text-[#92aec8]">Vehicles Sold</div>
+                      </div>
+                      <div class="text-center">
+                        <div class="text-[#1473cc] text-3xl font-bold">1000+</div>
+                        <div class="text-[#92aec8]">Happy Customers</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Auto Emporium Showroom" 
+                         class="rounded-xl w-full h-64 object-cover">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                  <div class="text-center">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm38.83-66.83a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L128,174.34l26.17-26.17A8,8,0,0,1,166.83,149.17Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Quality Assurance</h3>
+                    <p class="text-[#92aec8]">Every vehicle undergoes rigorous inspection and testing to ensure reliability and safety.</p>
+                  </div>
+                  <div class="text-center">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a8,8,0,0,0-6.24-.16,72,72,0,1,0-25.32,25.32,8,8,0,0,0,.16,6.24l27.49,44.7A88,88,0,1,1,216,128Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Customer First</h3>
+                    <p class="text-[#92aec8]">Your satisfaction is our priority. We're here to help you find the perfect vehicle for your needs.</p>
+                  </div>
+                  <div class="text-center">
+                    <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                        <path d="M201.54,54.46A104,104,0,0,0,54.46,201.54,104,104,0,0,0,201.54,54.46ZM190.23,65.77a88.07,88.07,0,0,1,0,124.46L65.77,65.77A88.07,88.07,0,0,1,190.23,65.77Z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-white text-xl font-bold mb-3">Fair Pricing</h3>
+                    <p class="text-[#92aec8]">Transparent, competitive pricing with no hidden fees. What you see is what you get.</p>
+                  </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-8 text-center">
+                  <h3 class="text-white text-2xl font-bold mb-4">Our Mission</h3>
+                  <p class="text-[#92aec8] text-lg max-w-4xl mx-auto">
+                    To provide our customers with the highest quality vehicles and services while building lasting relationships based on trust, integrity, and exceptional value. We believe that buying a car should be an exciting and stress-free experience.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-16 px-4">
+              <div class="max-w-6xl mx-auto">
+                <h2 class="text-white text-[32px] font-bold leading-tight tracking-[-0.015em] text-center mb-8">Contact Us</h2>
+                <p class="text-[#92aec8] text-lg text-center mb-12 max-w-3xl mx-auto">
+                  Ready to find your perfect vehicle? Get in touch with our friendly team today. We're here to help you every step of the way.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <!-- Contact Information -->
+                  <div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Get In Touch</h3>
+                    
+                    <div class="space-y-6">
+                      <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-[#1473cc] rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+                            <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 class="text-white font-bold mb-2">Address</h4>
+                          <p class="text-[#92aec8]">123 Auto Boulevard<br>Motor City, MC 12345</p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-[#1473cc] rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+                            <path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 class="text-white font-bold mb-2">Phone</h4>
+                          <p class="text-[#92aec8]">(555) 123-AUTO<br>(555) 123-2886</p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-[#1473cc] rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+                            <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 class="text-white font-bold mb-2">Email</h4>
+                          <p class="text-[#92aec8]">info@autoemporium.com<br>sales@autoemporium.com</p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-[#1473cc] rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+                            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,72a8,8,0,0,1,8,8v48a8,8,0,0,1-16,0V88h-8a8,8,0,0,1,0-16Zm0,96a12,12,0,1,1,12-12A12,12,0,0,1,128,168Z"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 class="text-white font-bold mb-2">Business Hours</h4>
+                          <p class="text-[#92aec8]">
+                            Mon-Fri: 9:00 AM - 8:00 PM<br>
+                            Saturday: 9:00 AM - 6:00 PM<br>
+                            Sunday: 11:00 AM - 5:00 PM
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Map -->
+                    <div class="mt-8">
+                      <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl" 
+                           style='background-image: url("https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80");'>
+                        <div class="w-full h-full bg-black bg-opacity-40 rounded-xl flex items-center justify-center">
+                          <div class="text-center">
+                            <div class="w-16 h-16 bg-[#1473cc] rounded-full flex items-center justify-center mx-auto mb-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 256 256">
+                                <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/>
+                              </svg>
+                            </div>
+                            <p class="text-white font-bold">Auto Emporium</p>
+                            <p class="text-white text-sm">Click to view in maps</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Contact Form -->
+                  <div class="bg-[#243647] rounded-xl p-8">
+                    <h3 class="text-white text-2xl font-bold mb-6">Send us a Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label class="block text-white text-sm font-medium mb-2">First Name *</label>
+                          <input type="text" id="contact-firstName" required
+                                 class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc]"
+                                 placeholder="Enter your first name">
+                        </div>
+                        <div>
+                          <label class="block text-white text-sm font-medium mb-2">Last Name *</label>
+                          <input type="text" id="contact-lastName" required
+                                 class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc]"
+                                 placeholder="Enter your last name">
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="block text-white text-sm font-medium mb-2">Email Address *</label>
+                        <input type="email" id="contact-email" required
+                               class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc]"
+                               placeholder="Enter your email address">
+                      </div>
+
+                      <div>
+                        <label class="block text-white text-sm font-medium mb-2">Phone Number</label>
+                        <input type="tel" id="contact-phone"
+                               class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc]"
+                               placeholder="Enter your phone number">
+                      </div>
+
+                      <div>
+                        <label class="block text-white text-sm font-medium mb-2">Subject *</label>
+                        <select id="contact-subject" required
+                                class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc]">
+                          <option value="">Select a subject</option>
+                          <option value="vehicle-inquiry">Vehicle Inquiry</option>
+                          <option value="service-appointment">Service Appointment</option>
+                          <option value="financing">Financing Information</option>
+                          <option value="trade-in">Trade-In Evaluation</option>
+                          <option value="general">General Question</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label class="block text-white text-sm font-medium mb-2">Message *</label>
+                        <textarea id="contact-message" required rows="5"
+                                  class="w-full px-4 py-3 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc] focus:ring-1 focus:ring-[#1473cc] resize-vertical"
+                                  placeholder="Enter your message here..."></textarea>
+                      </div>
+
+                      <button type="submit" id="contact-submit"
+                              class="w-full bg-[#1473cc] hover:bg-[#0f5ba8] text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="contact-submit-text">Send Message</span>
+                        <span id="contact-submit-loading" class="hidden">Sending...</span>
+                      </button>
+
+                      <div id="contact-message-status" class="hidden p-4 rounded-lg text-center"></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </section>
+        <footer class="flex justify-center">
+          <div class="flex max-w-[960px] flex-1 flex-col">
+            <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
+              <div class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
+                <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="user/privacy-policy.html">Privacy Policy</a>
+                <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="user/terms-of-service.html">Terms of Service</a>
+                <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="#contact">Contact Us</a>
+              </div>
+              <div class="flex flex-wrap justify-center gap-4">
+                <a href="#">
+                  <div class="text-[#92aec8]" data-icon="TwitterLogo" data-size="24px" data-weight="regular">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path
+                        d="M247.39,68.94A8,8,0,0,0,240,64H209.57A48.66,48.66,0,0,0,168.1,40a46.91,46.91,0,0,0-33.75,13.7A47.9,47.9,0,0,0,120,88v6.09C79.74,83.47,46.81,50.72,46.46,50.37a8,8,0,0,0-13.65,4.92c-4.31,47.79,9.57,79.77,22,98.18a110.93,110.93,0,0,0,21.88,24.2c-15.23,17.53-39.21,26.74-39.47,26.84a8,8,0,0,0-3.85,11.93c.75,1.12,3.75,5.05,11.08,8.72C53.51,229.7,65.48,232,80,232c70.67,0,129.72-54.42,135.75-124.44l29.91-29.9A8,8,0,0,0,247.39,68.94Zm-45,29.41a8,8,0,0,0-2.32,5.14C196,166.58,143.28,216,80,216c-10.56,0-18-1.4-23.22-3.08,11.51-6.25,27.56-17,37.88-32.48A8,8,0,0,0,92,169.08c-.47-.27-43.91-26.34-44-96,16,13,45.25,33.17,78.67,38.79A8,8,0,0,0,136,104V88a32,32,0,0,1,9.6-22.92A30.94,30.94,0,0,1,167.9,56c12.66.16,24.49,7.88,29.44,19.21A8,8,0,0,0,204.67,80h16Z"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <a href="#">
+                  <div class="text-[#92aec8]" data-icon="InstagramLogo" data-size="24px" data-weight="regular">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path
+                        d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                <a href="#">
+                  <div class="text-[#92aec8]" data-icon="FacebookLogo" data-size="24px" data-weight="regular">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path
+                        d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+              </div>
+              <p class="text-[#92aec8] text-base font-normal leading-normal">@2024 Auto Emporium. All rights reserved.</p>
+            </footer>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      // Firebase configuration - Replace with your Firebase config
+      const firebaseConfig = {
+    apiKey: "AIzaSyDlRSQJzFqrL-QENTJruiUltcdscOCdGNw",
+  authDomain: "gym-app-bd9c1.firebaseapp.com",
+  projectId: "gym-app-bd9c1",
+  storageBucket: "gym-app-bd9c1.firebasestorage.app",
+  messagingSenderId: "417740582785",
+  appId: "1:417740582785:web:79815f97de1bda79454280",
+  measurementId: "G-T4YJQDXL08"
+      };
+
+      // Initialize Firebase
+      let db;
+      try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        console.log('✅ Firebase initialized successfully');
+      } catch (error) {
+        console.error('❌ Firebase initialization failed:', error);
+        // Set db to null so we can handle offline mode
+        db = null;
+      }
+
+      // Slider Variables
+      let currentSlide = 0;
+      let slides = [];
+      let slideInterval;
+
+      // Sample slide data (fallback)
+      const sampleSlides = [
+        {
+          id: 'slide-1',
+          title: 'Find Your Dream Car',
+          subtitle: 'Explore our extensive collection of new and used vehicles. We offer competitive pricing and exceptional service to help you drive away in the perfect car.',
+          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAOAcDNFIIA91wqFQ5-5mjWyuSwJK2w3QAt94-gwTYe3fwX-1kSqFR-TzPoiIkKPkz8qktcbvRB0CXukxTx-upNQ57aSCqQWvSMR4F-bGlB6hN2EWCoJLoQiJ_8CZ0j4wOgVA2xrlPkxYMpDO6aYcQKFrnsS-M7ND0JoUDqESAyOGkonVkoCRJThbj_E18vwM1s5Nq8CRf5VwWd8T7mvrAFy1M5exmsgkC-PNa89V2-u3KHzz0__Fj57FMbs3FR2YVP2yWxhJKE4I0V',
+          buttonText: 'Browse Inventory',
+          buttonLink: 'user/vehicle-details.html',
+          secondaryButtonText: 'View All Cars',
+          secondaryButtonLink: 'user/vehicle-details.html',
+          active: true,
+          order: 1
+        },
+        {
+          id: 'slide-2',
+          title: 'Premium Quality Vehicles',
+          subtitle: 'Every vehicle in our inventory undergoes thorough inspection and comes with our quality guarantee. Drive with confidence knowing you made the right choice.',
+          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7vfix40qg1ZRF07iIvzNJQe8G5SlILqmJQILl7QK7clh3aZt94oCULDI8qmYNHZ2G0svMx4p-StKd57BQ45fIXHqqNirqA6IVdP1BFzXbYbYW8VNv3RwQmuXsuZ1qPLjvZKAfz-zzN-SYLZx6Wg54SRuydBdSJDXegHfnJ3cfh0MmiiHYvi5RR7C72RcpaAas2GUWCGSZzVOO2DVSXjhFuTfgOGOIxQMyuKwKwx4x_E7sPTrHNImlwBylqGbxek8m0OPb5wAoBKlm',
+          buttonText: 'View Our Quality Promise',
+          buttonLink: '#about',
+          secondaryButtonText: 'Contact Us',
+          secondaryButtonLink: '#contact',
+          active: true,
+          order: 2
+        },
+        {
+          id: 'slide-3',
+          title: 'Financing Made Easy',
+          subtitle: 'Get pre-approved in minutes with our flexible financing options. We work with multiple lenders to get you the best rates and terms.',
+          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5',
+          buttonText: 'Get Pre-Approved',
+          buttonLink: '#contact',
+          secondaryButtonText: 'Learn More',
+          secondaryButtonLink: '#services',
+          active: true,
+          order: 3
+        }
+      ];
+
+      // Function to load slides from Firebase
+      async function loadSlides() {
+        console.log('Loading slides...');
+        
+        if (!db) {
+          console.log('Firebase not available, using sample slides');
+          slides = sampleSlides;
+          displaySlides();
+          return;
+        }
+
+        try {
+          const snapshot = await db.collection('slides').where('active', '==', true).orderBy('order', 'asc').get();
+          
+          if (snapshot.empty) {
+            console.log('No slides found in Firebase, using sample slides');
+            slides = sampleSlides;
+          } else {
+            slides = [];
+            snapshot.forEach(doc => {
+              slides.push({ id: doc.id, ...doc.data() });
+            });
+          }
+          
+          displaySlides();
+          console.log(`Loaded ${slides.length} slides`);
+          
+        } catch (error) {
+          console.error('Error loading slides:', error);
+          console.log('Falling back to sample slides');
+          slides = sampleSlides;
+          displaySlides();
+        }
+      }
+
+      // Function to display slides
+      function displaySlides() {
+        const slidesContainer = document.getElementById('slides-container');
+        const dotsContainer = document.getElementById('slider-dots');
+        
+        if (slides.length === 0) {
+          console.log('No slides to display');
+          return;
+        }
+
+        // Clear existing content
+        slidesContainer.innerHTML = '';
+        dotsContainer.innerHTML = '';
+
+        // Create slides
+        slides.forEach((slide, index) => {
+          const slideElement = document.createElement('div');
+          slideElement.className = 'slide w-full flex-shrink-0 flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 items-center justify-center p-4';
+          slideElement.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("${slide.image}")`;
+          
+          slideElement.innerHTML = `
+            <div class="flex flex-col gap-2 text-center">
+              <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                ${slide.title}
+              </h1>
+              <h2 class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                ${slide.subtitle}
+              </h2>
+            </div>
+            <div class="flex gap-4 flex-wrap justify-center">
+              <a href="${slide.buttonLink}" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#1473cc] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-blue-600 transition-colors">
+                <span class="truncate">${slide.buttonText}</span>
+              </a>
+              ${slide.secondaryButtonText ? `
+                <a href="${slide.secondaryButtonLink}" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 border-2 border-[#1473cc] text-[#1473cc] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-[#1473cc] hover:text-white transition-colors">
+                  <span class="truncate">${slide.secondaryButtonText}</span>
+                </a>
+              ` : ''}
+            </div>
+          `;
+          
+          slidesContainer.appendChild(slideElement);
+
+          // Create dot navigation
+          const dot = document.createElement('button');
+          dot.className = `slider-dot w-3 h-3 rounded-full transition-colors ${index === 0 ? 'bg-white' : 'bg-white bg-opacity-50 hover:bg-opacity-75'}`;
+          dot.setAttribute('data-slide', index);
+          dot.addEventListener('click', () => goToSlide(index));
+          dotsContainer.appendChild(dot);
+        });
+
+        // Start auto-slide if more than one slide
+        if (slides.length > 1) {
+          startAutoSlide();
+        }
+      }
+
+      // Function to go to specific slide
+      function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        const slidesContainer = document.getElementById('slides-container');
+        const dots = document.querySelectorAll('.slider-dot');
+        
+        // Update slide position
+        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+          if (index === currentSlide) {
+            dot.className = 'slider-dot w-3 h-3 rounded-full bg-white transition-colors';
+          } else {
+            dot.className = 'slider-dot w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-colors';
+          }
+        });
+      }
+
+      // Function to go to next slide
+      function nextSlide() {
+        if (slides.length === 0) return;
+        currentSlide = (currentSlide + 1) % slides.length;
+        goToSlide(currentSlide);
+      }
+
+      // Function to go to previous slide
+      function prevSlide() {
+        if (slides.length === 0) return;
+        currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+        goToSlide(currentSlide);
+      }
+
+      // Function to start auto-slide
+      function startAutoSlide() {
+        stopAutoSlide(); // Clear any existing interval
+        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+      }
+
+      // Function to stop auto-slide
+      function stopAutoSlide() {
+        if (slideInterval) {
+          clearInterval(slideInterval);
+        }
+      }
+
+      // Event listeners for navigation
+      document.addEventListener('DOMContentLoaded', () => {
+        const prevButton = document.getElementById('prev-slide');
+        const nextButton = document.getElementById('next-slide');
+        const slider = document.getElementById('hero-slider');
+
+        if (prevButton) {
+          prevButton.addEventListener('click', () => {
+            prevSlide();
+            stopAutoSlide(); // Stop auto-slide when user manually navigates
+            setTimeout(startAutoSlide, 10000); // Restart auto-slide after 10 seconds
+          });
+        }
+
+        if (nextButton) {
+          nextButton.addEventListener('click', () => {
+            nextSlide();
+            stopAutoSlide(); // Stop auto-slide when user manually navigates
+            setTimeout(startAutoSlide, 10000); // Restart auto-slide after 10 seconds
+          });
+        }
+
+        // Pause auto-slide on hover
+        if (slider) {
+          slider.addEventListener('mouseenter', stopAutoSlide);
+          slider.addEventListener('mouseleave', startAutoSlide);
+        }
+      });
+
+      // Function to load team members from Firebase
+      async function loadTeamMembers() {
+        console.log('Loading team members...');
+        const teamContainer = document.getElementById('team-container');
+        
+        // If Firebase is not available, load sample data directly
+        if (!db) {
+          console.log('Firebase not available, loading sample team data...');
+          loadSampleTeamData();
+          return;
+        }
+        
+        try {
+          console.log('Fetching team members from Firebase...');
+          const snapshot = await db.collection('team').orderBy('order', 'asc').get();
+          console.log('Team snapshot size:', snapshot.size);
+          
+          if (snapshot.empty) {
+            console.log('No team members found in Firebase, loading sample data...');
+            loadSampleTeamData();
+            return;
+          }
+
+          teamContainer.innerHTML = ''; // Clear loading message
+          console.log('Creating team member elements...');
+          
+          snapshot.forEach(doc => {
+            const member = doc.data();
+            console.log('Creating element for team member:', member.name);
+            const memberElement = createTeamMemberElement(member, doc.id);
+            teamContainer.appendChild(memberElement);
+          });
+          console.log('Team members loaded successfully!');
+        } catch (error) {
+          console.error('Error loading team members:', error);
+          console.error('Firebase error details:', error.code, error.message);
+          console.log('Falling back to sample team data...');
+          loadSampleTeamData();
+        }
+      }
+
+      // Function to load sample team data directly (fallback)
+      function loadSampleTeamData() {
+        const teamContainer = document.getElementById('team-container');
+        const sampleTeamMembers = [
+          {
+            name: "Liam Carter",
+            position: "Sales Manager",
+            email: "liam.carter@autoemporium.com",
+            phone: "(555) 123-0001",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHtqIxUvv_JqZ0FgnZT2AbAl8LUi9XoqCA8DsDYsT33yJ2oGrAy1QDcaNA8hnZLT6vHyhIYCdNmAWCntv3dRWk_xko_zszlHwLtF2aZUxknob71d7oOfcy6UiHkISokFlxMMmoZKtT84sSIez_RJBBzaICSkXYo02cD7mSrW3SSg-bBvfKl5HWWSYcgN2n8QJD2G2p0TdhrjH81fiM1y2KQwK8wIyFzxOyzuxvHu2H-sIyLX-DtJr8antCJVeouzMeYb_esuhQwdaB",
+            experience: 8,
+            bio: "Liam has been with Auto Emporium for over 8 years, helping customers find their perfect vehicle. His expertise in automotive sales and customer service makes him a valuable asset to our team.",
+            order: 1
+          },
+          {
+            name: "Olivia Hayes",
+            position: "Service Advisor",
+            email: "olivia.hayes@autoemporium.com",
+            phone: "(555) 123-0002",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnaM-gcasCMhcDoo0Vg7joycrDdE6MSEC6HMbVM_5QWFAMhHdBwmeoooRzmhzMIOXDXW7q6yYzD1EqCX-EFkPkubShvPsTMBna6J-_Xcpwnst8AEWWlcXbccoGg6Lpcm7MbigufqmMx1G4lXygDZdAv6Pg2Av48W0f7-JkV1sLI9FOnoy8DPs03oF5lcgRjm0L2CMcsrBC4ZpjvowwlzRx8du2Va4GwVW7KvXs4B5Xr2lUyNC7jTH2NqeBIM1Ef5bx3YN0FU9VIUK7",
+            experience: 5,
+            bio: "Olivia ensures that every customer receives top-notch service for their vehicle. With her attention to detail and technical knowledge, she coordinates all service appointments and keeps customers informed throughout the process.",
+            order: 2
+          },
+          {
+            name: "Noah Foster",
+            position: "Lead Technician",
+            email: "noah.foster@autoemporium.com",
+            phone: "(555) 123-0003",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAD0Tlk6Im_7ph6XeB4Tgxr-N8KHlC9KJe8_JduQSTryvIPGw4qB6M3X7eBr46akwVpsxrwZf0v4a6xRGo36vbQckTVJN2hvjV7l7srVoAy5rp5OwZHegTpIZzTKUOapODll12jcxDHUoNDMyrbA7Bmi8ixCj7lkWTQPX7P3CM1AOPKyoCPoa3XctET3cn59U_DohgfBe-8KJ8qfal0eltUi5IT1J-fGx7UmyT996w67YnRb4N9K9mAKG3ovsO2KRgZFG7pGR1sGIiD",
+            experience: 12,
+            bio: "Noah is our most experienced technician with over 12 years in automotive repair. He specializes in both modern and classic vehicles, ensuring every car that comes through our service department receives expert care.",
+            order: 3
+          }
+        ];
+
+        teamContainer.innerHTML = ''; // Clear loading message
+        sampleTeamMembers.forEach((member, index) => {
+          const memberElement = createTeamMemberElement(member, `sample-${index}`);
+          teamContainer.appendChild(memberElement);
+        });
+        console.log('Sample team data loaded successfully!');
+      }
+
+      // Function to create team member element
+      function createTeamMemberElement(member, memberId) {
+        const memberDiv = document.createElement('div');
+        memberDiv.className = 'flex flex-col gap-3 text-center pb-3 team-member cursor-pointer transition-transform hover:scale-105';
+        memberDiv.setAttribute('data-member-id', memberId);
+        
+        memberDiv.innerHTML = `
+          <div class="px-4">
+            <div
+              class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-full border-2 border-transparent hover:border-[#1473cc] transition-colors"
+              style="background-image: url('${member.photo || 'https://via.placeholder.com/150x150?text=No+Photo'}');"
+            ></div>
+          </div>
+          <div>
+            <p class="text-white text-base font-medium leading-normal">${member.name || 'Unknown'}</p>
+            <p class="text-[#92aec8] text-sm font-normal leading-normal">${member.position || 'No Position'}</p>
+            <p class="text-[#92aec8] text-sm font-normal leading-normal">${member.email || 'No Email'}</p>
+            ${member.phone ? `<p class="text-[#92aec8] text-sm font-normal leading-normal">${member.phone}</p>` : ''}
+          </div>
+        `;
+
+        // Add click event to show member details
+        memberDiv.addEventListener('click', () => showMemberDetails(member, memberId));
+        
+        return memberDiv;
+      }
+
+      // Function to show member details in a modal
+      function showMemberDetails(member, memberId) {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            <div class="text-center">
+              <div class="w-32 h-32 mx-auto mb-4 bg-center bg-no-repeat bg-cover rounded-full border-2 border-[#243647]"
+                   style="background-image: url('${member.photo || 'https://via.placeholder.com/150x150?text=No+Photo'}');"></div>
+              <h3 class="text-white text-xl font-bold mb-2">${member.name || 'Unknown'}</h3>
+              <p class="text-[#1473cc] text-lg font-medium mb-4">${member.position || 'No Position'}</p>
+              
+              <div class="text-left space-y-3">
+                ${member.email ? `
+                  <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    </svg>
+                    <span class="text-[#92aec8]">${member.email}</span>
+                  </div>
+                ` : ''}
+                
+                ${member.phone ? `
+                  <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                    </svg>
+                    <span class="text-[#92aec8]">${member.phone}</span>
+                  </div>
+                ` : ''}
+                
+                ${member.experience ? `
+                  <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-[#92aec8]">${member.experience} years experience</span>
+                  </div>
+                ` : ''}
+                
+                ${member.bio ? `
+                  <div class="mt-4">
+                    <h4 class="text-white font-medium mb-2">About</h4>
+                    <p class="text-[#92aec8] text-sm leading-relaxed">${member.bio}</p>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        });
+      }
+
+      // Initialize sample data in Firebase (run this once to populate your database)
+      async function initializeSampleData() {
+        const sampleTeamMembers = [
+          {
+            name: "Liam Carter",
+            position: "Sales Manager",
+            email: "liam.carter@autoemporium.com",
+            phone: "(555) 123-0001",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHtqIxUvv_JqZ0FgnZT2AbAl8LUi9XoqCA8DsDYsT33yJ2oGrAy1QDcaNA8hnZLT6vHyhIYCdNmAWCntv3dRWk_xko_zszlHwLtF2aZUxknob71d7oOfcy6UiHkISokFlxMMmoZKtT84sSIez_RJBBzaICSkXYo02cD7mSrW3SSg-bBvfKl5HWWSYcgN2n8QJD2G2p0TdhrjH81fiM1y2KQwK8wIyFzxOyzuxvHu2H-sIyLX-DtJr8antCJVeouzMeYb_esuhQwdaB",
+            experience: 8,
+            bio: "Liam has been with Auto Emporium for over 8 years, helping customers find their perfect vehicle. His expertise in automotive sales and customer service makes him a valuable asset to our team.",
+            order: 1
+          },
+          {
+            name: "Olivia Hayes",
+            position: "Service Advisor",
+            email: "olivia.hayes@autoemporium.com",
+            phone: "(555) 123-0002",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnaM-gcasCMhcDoo0Vg7joycrDdE6MSEC6HMbVM_5QWFAMhHdBwmeoooRzmhzMIOXDXW7q6yYzD1EqCX-EFkPkubShvPsTMBna6J-_Xcpwnst8AEWWlcXbccoGg6Lpcm7MbigufqmMx1G4lXygDZdAv6Pg2Av48W0f7-JkV1sLI9FOnoy8DPs03oF5lcgRjm0L2CMcsrBC4ZpjvowwlzRx8du2Va4GwVW7KvXs4B5Xr2lUyNC7jTH2NqeBIM1Ef5bx3YN0FU9VIUK7",
+            experience: 5,
+            bio: "Olivia ensures that every customer receives top-notch service for their vehicle. With her attention to detail and technical knowledge, she coordinates all service appointments and keeps customers informed throughout the process.",
+            order: 2
+          },
+          {
+            name: "Noah Foster",
+            position: "Lead Technician",
+            email: "noah.foster@autoemporium.com",
+            phone: "(555) 123-0003",
+            photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAD0Tlk6Im_7ph6XeB4Tgxr-N8KHlC9KJe8_JduQSTryvIPGw4qB6M3X7eBr46akwVpsxrwZf0v4a6xRGo36vbQckTVJN2hvjV7l7srVoAy5rp5OwZHegTpIZzTKUOapODll12jcxDHUoNDMyrbA7Bmi8ixCj7lkWTQPX7P3CM1AOPKyoCPoa3XctET3cn59U_DohgfBe-8KJ8qfal0eltUi5IT1J-fGx7UmyT996w67YnRb4N9K9mAKG3ovsO2KRgZFG7pGR1sGIiD",
+            experience: 12,
+            bio: "Noah is our most experienced technician with over 12 years in automotive repair. He specializes in both modern and classic vehicles, ensuring every car that comes through our service department receives expert care.",
+            order: 3
+          }
+        ];
+
+        try {
+          for (const member of sampleTeamMembers) {
+            await db.collection('team').add(member);
+          }
+          console.log('Sample team data initialized successfully!');
+        } catch (error) {
+          console.error('Error initializing sample data:', error);
+        }
+      }
+
+      // Function to load featured vehicles from Firebase
+      async function loadFeaturedVehicles() {
+        console.log('Loading featured vehicles...');
+        const vehiclesContainer = document.getElementById('vehicles-container');
+        const vehiclesWrapper = vehiclesContainer.querySelector('.flex.items-stretch.p-4.gap-3');
+        
+        // If Firebase is not available, load sample data directly
+        if (!db) {
+          console.log('Firebase not available, loading sample vehicle data...');
+          loadSampleVehicleData();
+          return;
+        }
+        
+        try {
+          console.log('Fetching featured vehicles from Firebase...');
+          const snapshot = await db.collection('vehicles').where('featured', '==', true).orderBy('order', 'asc').get();
+          console.log('Featured vehicles snapshot size:', snapshot.size);
+          
+          if (snapshot.empty) {
+            console.log('No featured vehicles found in Firebase, loading sample data...');
+            loadSampleVehicleData();
+            return;
+          }
+
+          vehiclesWrapper.innerHTML = ''; // Clear loading message
+          console.log('Creating vehicle elements...');
+          
+          snapshot.forEach(doc => {
+            const vehicle = doc.data();
+            console.log('Creating element for vehicle:', vehicle.name);
+            const vehicleElement = createVehicleElement(vehicle, doc.id);
+            vehiclesWrapper.appendChild(vehicleElement);
+          });
+          console.log('Featured vehicles loaded successfully!');
+        } catch (error) {
+          console.error('Error loading featured vehicles:', error);
+          console.error('Firebase error details:', error.code, error.message);
+          console.log('Falling back to sample vehicle data...');
+          loadSampleVehicleData();
+        }
+      }
+
+      // Function to load sample vehicle data directly (fallback)
+      function loadSampleVehicleData() {
+        const vehiclesContainer = document.getElementById('vehicles-container');
+        const vehiclesWrapper = vehiclesContainer.querySelector('.flex.items-stretch.p-4.gap-3');
+        
+        const sampleVehicles = [
+          {
+            name: "2023 Luxury Sedan",
+            make: "Mercedes-Benz",
+            model: "C-Class",
+            year: 2023,
+            price: 45000,
+            mileage: 12000,
+            fuelType: "Gasoline",
+            transmission: "Automatic",
+            description: "Sleek design and advanced technology with premium interior",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUSF4WLrfQ-a6MYutTzhj7XjnwALdyx8dcesyMi6-LQDqKcH6jslSjgzJLyXWJj3sjUY3GSveJdEX81zvposWKtjsAdV4NH8Zsfy4fdQZrYmgQxkjjZJk_DhsHYM6YwtGW_SOCBicmAVGfidJZ2eG69IJTXKS77PHSTesQeI7f9BtdU_0L1RVVRa3Nfz5nd5vlhb2KX9whZq24WK8JSkF13BXzDwnb1ZkSnz1E4cBr-mUh_Rmh0psY3arMxbE6rWo22_YUTyuRhJsS",
+            features: ["Leather Seats", "Navigation System", "Sunroof", "Backup Camera"],
+            featured: true,
+            order: 1
+          },
+          {
+            name: "2022 Sports Coupe",
+            make: "BMW",
+            model: "M4",
+            year: 2022,
+            price: 65000,
+            mileage: 8500,
+            fuelType: "Gasoline",
+            transmission: "Manual",
+            description: "High performance and stylish appearance with racing-inspired design",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7vfix40qg1ZRF07iIvzNJQe8G5SlILqmJQILl7QK7clh3aZt94oCULDI8qmYNHZ2G0svMx4p-StKd57BQ45fIXHqqNirqA6IVdP1BFzXbYbYW8VNv3RwQmuXsuZ1qPLjvZKAfz-zzN-SYLZx6Wg54SRuydBdSJDXegHfnJ3cfh0MmiiHYvi5RR7C72RcpaAas2GUWCGSZzVOO2DVSXjhFuTfgOGOIxQMyuKwKwx4x_E7sPTrHNImlwBylqGbxek8m0OPb5wAoBKlm",
+            features: ["Sport Package", "Carbon Fiber Trim", "Performance Brakes", "Track Mode"],
+            featured: true,
+            order: 2
+          },
+          {
+            name: "2023 Family SUV",
+            make: "Toyota",
+            model: "Highlander",
+            year: 2023,
+            price: 38000,
+            mileage: 15000,
+            fuelType: "Hybrid",
+            transmission: "CVT",
+            description: "Spacious interior and powerful engine perfect for families",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5",
+            features: ["3rd Row Seating", "All-Wheel Drive", "Safety Sense 2.0", "Wireless Charging"],
+            featured: true,
+            order: 3
+          },
+          {
+            name: "2024 Electric Vehicle",
+            make: "Tesla",
+            model: "Model 3",
+            year: 2024,
+            price: 52000,
+            mileage: 5000,
+            fuelType: "Electric",
+            transmission: "Single Speed",
+            description: "Eco-friendly and innovative features with cutting-edge technology",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCIaUmyYCiUBxpzwrQdNHmMvbMAkjnZCPX3mMz82NO1j2YtAorY16LWSrYxfvnblm-sWBqsM4lEWVGd5cT6NJweh_PvrDi6_04QakULCqRUKDviuGxdacmHlmaT7vwmp-M7FrsnFH1IO-IM54ogsof89IeIXFdqOl6syDbx66vcAgtzUMMlkhRQWViRngVupJExa0fO1s99T_HH3ZBucaIurjSSfWTT8aOWP6L9MDl6iy4JaQm30DCNs8ZfRI14MFD2C06kfPy-3rS6",
+            features: ["Autopilot", "Supercharging", "Premium Audio", "Glass Roof"],
+            featured: true,
+            order: 4
+          }
+        ];
+
+        vehiclesWrapper.innerHTML = ''; // Clear loading message
+        sampleVehicles.forEach((vehicle, index) => {
+          const vehicleElement = createVehicleElement(vehicle, `sample-${index}`);
+          vehiclesWrapper.appendChild(vehicleElement);
+        });
+        console.log('Sample vehicle data loaded successfully!');
+      }
+
+      // Function to create vehicle element
+      function createVehicleElement(vehicle, vehicleId) {
+        const vehicleDiv = document.createElement('div');
+        vehicleDiv.className = 'flex h-full flex-1 flex-col gap-4 rounded-lg min-w-60 cursor-pointer transition-transform hover:scale-105';
+        vehicleDiv.setAttribute('data-vehicle-id', vehicleId);
+        
+        vehicleDiv.innerHTML = `
+          <div
+            class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col border-2 border-transparent hover:border-[#1473cc] transition-colors"
+            style="background-image: url('${vehicle.image || 'https://via.placeholder.com/300x200?text=No+Image'}');"
+          ></div>
+          <div>
+            <p class="text-white text-base font-medium leading-normal">${vehicle.name || 'Unknown Vehicle'}</p>
+            <p class="text-[#92aec8] text-sm font-normal leading-normal">${vehicle.description || 'No description available'}</p>
+            ${vehicle.price ? `<p class="text-[#1473cc] text-sm font-bold leading-normal mt-1">$${vehicle.price.toLocaleString()}</p>` : ''}
+            <div class="flex gap-2 mt-3">
+              <button onclick="event.stopPropagation(); window.location.href='user/vehicle-details.html'" class="bg-[#1473cc] text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition-colors">
+                View Details
+              </button>
+              <button onclick="event.stopPropagation(); showTestDriveModal('${vehicleId}', '${vehicle.name || 'Vehicle'}')" class="border border-[#1473cc] text-[#1473cc] text-xs px-3 py-1 rounded hover:bg-[#1473cc] hover:text-white transition-colors">
+                Test Drive
+              </button>
+            </div>
+          </div>
+        `;
+
+        // Add click event to show vehicle details
+        vehicleDiv.addEventListener('click', () => showVehicleDetails(vehicle, vehicleId));
+        
+        return vehicleDiv;
+      }
+
+      // Function to show vehicle details in a modal
+      function showVehicleDetails(vehicle, vehicleId) {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl z-10" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            <div>
+              <div class="w-full h-64 mb-4 bg-center bg-no-repeat bg-cover rounded-xl border-2 border-[#243647]"
+                   style="background-image: url('${vehicle.image || 'https://via.placeholder.com/600x400?text=No+Image'}');"></div>
+              
+              <div class="space-y-4">
+                <div>
+                  <h3 class="text-white text-2xl font-bold mb-2">${vehicle.name || 'Unknown Vehicle'}</h3>
+                  ${vehicle.price ? `<p class="text-[#1473cc] text-xl font-bold mb-3">$${vehicle.price.toLocaleString()}</p>` : ''}
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  ${vehicle.year ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Year: <span class="text-white">${vehicle.year}</span></span>
+                    </div>
+                  ` : ''}
+                  
+                  ${vehicle.make ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Make: <span class="text-white">${vehicle.make}</span></span>
+                    </div>
+                  ` : ''}
+                  
+                  ${vehicle.model ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 6.707 6.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Model: <span class="text-white">${vehicle.model}</span></span>
+                    </div>
+                  ` : ''}
+                  
+                  ${vehicle.mileage ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Mileage: <span class="text-white">${vehicle.mileage.toLocaleString()} miles</span></span>
+                    </div>
+                  ` : ''}
+                  
+                  ${vehicle.fuelType ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Fuel: <span class="text-white">${vehicle.fuelType}</span></span>
+                    </div>
+                  ` : ''}
+                  
+                  ${vehicle.transmission ? `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-[#92aec8]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span class="text-[#92aec8]">Transmission: <span class="text-white">${vehicle.transmission}</span></span>
+                    </div>
+                  ` : ''}
+                </div>
+                
+                ${vehicle.description ? `
+                  <div class="mt-4">
+                    <h4 class="text-white font-medium mb-2">Description</h4>
+                    <p class="text-[#92aec8] text-sm leading-relaxed">${vehicle.description}</p>
+                  </div>
+                ` : ''}
+                
+                ${vehicle.features && vehicle.features.length > 0 ? `
+                  <div class="mt-4">
+                    <h4 class="text-white font-medium mb-2">Features</h4>
+                    <div class="flex flex-wrap gap-2">
+                      ${vehicle.features.map(feature => `
+                        <span class="bg-[#243647] text-[#92aec8] px-2 py-1 rounded text-xs">${feature}</span>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+                
+                <div class="flex flex-col sm:flex-row gap-3 mt-6">
+                  <button onclick="showContactModal('${vehicleId}', '${vehicle.name}')" class="flex-1 bg-[#1473cc] text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                    </svg>
+                    Contact About This Vehicle
+                  </button>
+                  <button onclick="showTestDriveModal('${vehicleId}', '${vehicle.name}')" class="px-4 py-2 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                    </svg>
+                    Schedule Test Drive
+                  </button>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="mt-4 pt-4 border-t border-[#243647]">
+                  <div class="flex flex-wrap gap-2 text-sm">
+                    <a href="tel:+1-555-AUTO-DEAL" class="flex items-center gap-1 text-[#1473cc] hover:text-white transition-colors">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                      </svg>
+                      Call Now
+                    </a>
+                    <button onclick="shareVehicle('${vehicleId}', '${vehicle.name}')" class="flex items-center gap-1 text-[#92aec8] hover:text-white transition-colors">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                      </svg>
+                      Share
+                    </button>
+                    <button onclick="saveVehicle('${vehicleId}', '${vehicle.name}')" class="flex items-center gap-1 text-[#92aec8] hover:text-white transition-colors">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                      </svg>
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.remove();
+          }
+        });
+      }
+
+      // Initialize sample vehicle data in Firebase
+      async function initializeSampleVehicleData() {
+        const sampleVehicles = [
+          {
+            name: "2023 Luxury Sedan",
+            make: "Mercedes-Benz",
+            model: "C-Class",
+            year: 2023,
+            price: 45000,
+            mileage: 12000,
+            fuelType: "Gasoline",
+            transmission: "Automatic",
+            description: "Sleek design and advanced technology with premium interior",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUSF4WLrfQ-a6MYutTzhj7XjnwALdyx8dcesyMi6-LQDqKcH6jslSjgzJLyXWJj3sjUY3GSveJdEX81zvposWKtjsAdV4NH8Zsfy4fdQZrYmgQxkjjZJk_DhsHYM6YwtGW_SOCBicmAVGfidJZ2eG69IJTXKS77PHSTesQeI7f9BtdU_0L1RVVRa3Nfz5nd5vlhb2KX9whZq24WK8JSkF13BXzDwnb1ZkSnz1E4cBr-mUh_Rmh0psY3arMxbE6rWo22_YUTyuRhJsS",
+            features: ["Leather Seats", "Navigation System", "Sunroof", "Backup Camera"],
+            featured: true,
+            order: 1
+          },
+          {
+            name: "2022 Sports Coupe",
+            make: "BMW",
+            model: "M4",
+            year: 2022,
+            price: 65000,
+            mileage: 8500,
+            fuelType: "Gasoline",
+            transmission: "Manual",
+            description: "High performance and stylish appearance with racing-inspired design",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7vfix40qg1ZRF07iIvzNJQe8G5SlILqmJQILl7QK7clh3aZt94oCULDI8qmYNHZ2G0svMx4p-StKd57BQ45fIXHqqNirqA6IVdP1BFzXbYbYW8VNv3RwQmuXsuZ1qPLjvZKAfz-zzN-SYLZx6Wg54SRuydBdSJDXegHfnJ3cfh0MmiiHYvi5RR7C72RcpaAas2GUWCGSZzVOO2DVSXjhFuTfgOGOIxQMyuKwKwx4x_E7sPTrHNImlwBylqGbxek8m0OPb5wAoBKlm",
+            features: ["Sport Package", "Carbon Fiber Trim", "Performance Brakes", "Track Mode"],
+            featured: true,
+            order: 2
+          },
+          {
+            name: "2023 Family SUV",
+            make: "Toyota",
+            model: "Highlander",
+            year: 2023,
+            price: 38000,
+            mileage: 15000,
+            fuelType: "Hybrid",
+            transmission: "CVT",
+            description: "Spacious interior and powerful engine perfect for families",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5",
+            features: ["3rd Row Seating", "All-Wheel Drive", "Safety Sense 2.0", "Wireless Charging"],
+            featured: true,
+            order: 3
+          },
+          {
+            name: "2024 Electric Vehicle",
+            make: "Tesla",
+            model: "Model 3",
+            year: 2024,
+            price: 52000,
+            mileage: 5000,
+            fuelType: "Electric",
+            transmission: "Single Speed",
+            description: "Eco-friendly and innovative features with cutting-edge technology",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCIaUmyYCiUBxpzwrQdNHmMvbMAkjnZCPX3mMz82NO1j2YtAorY16LWSrYxfvnblm-sWBqsM4lEWVGd5cT6NJweh_PvrDi6_04QakULCqRUKDviuGxdacmHlmaT7vwmp-M7FrsnFH1IO-IM54ogsof89IeIXFdqOl6syDbx66vcAgtzUMMlkhRQWViRngVupJExa0fO1s99T_HH3ZBucaIurjSSfWTT8aOWP6L9MDl6iy4JaQm30DCNs8ZfRI14MFD2C06kfPy-3rS6",
+            features: ["Autopilot", "Supercharging", "Premium Audio", "Glass Roof"],
+            featured: true,
+            order: 4
+          }
+        ];
+
+        try {
+          for (const vehicle of sampleVehicles) {
+            await db.collection('vehicles').add(vehicle);
+          }
+          console.log('Sample vehicle data initialized successfully!');
+        } catch (error) {
+          console.error('Error initializing sample vehicle data:', error);
+        }
+      }
+
+      // Load content when the page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('🚀 Page loaded, initializing content...');
+        loadTeamMembers();
+        loadFeaturedVehicles();
+      });
+
+      // Optional: Initialize sample data in Firebase (only if Firebase is available)
+      async function tryInitializeFirebaseData() {
+        if (!db) {
+          console.log('⚠️ Firebase not available, skipping data initialization');
+          // Load slides with fallback data
+          loadSlides();
+          return;
+        }
+
+        try {
+          console.log('🔍 Checking if Firebase data needs initialization...');
+          
+          // Load slides first
+          loadSlides();
+          
+          // Check if team collection has data
+          const teamSnapshot = await db.collection('team').limit(1).get();
+          if (teamSnapshot.empty) {
+            console.log('📝 Initializing sample team data in Firebase...');
+            await initializeSampleData();
+            console.log('✅ Sample team data initialized!');
+          } else {
+            console.log('✅ Team data already exists in Firebase');
+          }
+          
+          // Check if vehicles collection has data
+          const vehicleSnapshot = await db.collection('vehicles').limit(1).get();
+          if (vehicleSnapshot.empty) {
+            console.log('📝 Initializing sample vehicle data in Firebase...');
+            await initializeSampleVehicleData();
+            console.log('✅ Sample vehicle data initialized!');
+          } else {
+            console.log('✅ Vehicle data already exists in Firebase');
+          }
+          
+        } catch (error) {
+          console.error('❌ Firebase data initialization failed:', error);
+          console.log('📱 Website will continue with fallback data');
+        }
+      }
+
+      // Try to initialize Firebase data if available
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(tryInitializeFirebaseData, 1000); // Give Firebase time to initialize
+      });
+
+      // Contact Modal Function
+      function showContactModal(vehicleId, vehicleName) {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            
+            <h3 class="text-white text-xl font-bold mb-4">Contact About: ${vehicleName}</h3>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Your Name *</label>
+                <input type="text" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Email *</label>
+                <input type="email" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Phone</label>
+                <input type="tel" class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Message</label>
+                <textarea rows="3" placeholder="I'm interested in this vehicle..." class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+              </div>
+              
+              <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                  Send Message
+                </button>
+                <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Handle form submission
+        modal.querySelector('form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Thank you for your interest! We will contact you shortly.');
+          modal.remove();
+        });
+      }
+
+      // Test Drive Modal Function
+      function showTestDriveModal(vehicleId, vehicleName) {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            
+            <h3 class="text-white text-xl font-bold mb-4">Schedule Test Drive: ${vehicleName}</h3>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Your Name *</label>
+                <input type="text" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Email *</label>
+                <input type="email" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Phone *</label>
+                <input type="tel" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Preferred Date *</label>
+                  <input type="date" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                </div>
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Preferred Time *</label>
+                  <select required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    <option value="">Select Time</option>
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="1:00 PM">1:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="4:00 PM">4:00 PM</option>
+                    <option value="5:00 PM">5:00 PM</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                  Schedule Test Drive
+                </button>
+                <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Handle form submission
+        modal.querySelector('form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert('Test drive scheduled! We will contact you to confirm the appointment.');
+          modal.remove();
+        });
+      }
+
+      // Vehicle sharing function
+      function shareVehicle(vehicleId, vehicleName) {
+        if (navigator.share) {
+          navigator.share({
+            title: `${vehicleName} - Auto Emporium`,
+            text: `Check out this vehicle at Auto Emporium: ${vehicleName}`,
+            url: `${window.location.href}#vehicle-${vehicleId}`
+          });
+        } else {
+          const url = `${window.location.href}#vehicle-${vehicleId}`;
+          navigator.clipboard.writeText(url).then(() => {
+            alert('Vehicle link copied to clipboard!');
+          }).catch(() => {
+            prompt('Copy this link to share:', url);
+          });
+        }
+      }
+
+      // Save vehicle function
+      function saveVehicle(vehicleId, vehicleName) {
+        let savedVehicles = JSON.parse(localStorage.getItem('savedVehicles') || '[]');
+        if (!savedVehicles.includes(vehicleId)) {
+          savedVehicles.push(vehicleId);
+          localStorage.setItem('savedVehicles', JSON.stringify(savedVehicles));
+          alert(`${vehicleName} has been saved to your favorites!`);
+        } else {
+          alert(`${vehicleName} is already in your favorites.`);
+        }
+      }
+
+      // Contact Form Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.getElementById('contact-form');
+        const submitButton = document.getElementById('contact-submit');
+        const submitText = document.getElementById('contact-submit-text');
+        const submitLoading = document.getElementById('contact-submit-loading');
+        const messageStatus = document.getElementById('contact-message-status');
+
+        if (contactForm) {
+          contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+              firstName: document.getElementById('contact-firstName').value.trim(),
+              lastName: document.getElementById('contact-lastName').value.trim(),
+              email: document.getElementById('contact-email').value.trim(),
+              phone: document.getElementById('contact-phone').value.trim(),
+              subject: document.getElementById('contact-subject').value,
+              message: document.getElementById('contact-message').value.trim(),
+              timestamp: new Date().toISOString(),
+              status: 'new'
+            };
+
+            // Validate required fields
+            if (!formData.firstName || !formData.lastName || !formData.email || !formData.subject || !formData.message) {
+              showMessage('Please fill in all required fields.', 'error');
+              return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+              showMessage('Please enter a valid email address.', 'error');
+              return;
+            }
+
+            // Show loading state
+            setLoadingState(true);
+
+            try {
+              // Try to save to Firebase
+              if (db) {
+                await db.collection('contact-submissions').add(formData);
+                console.log('Contact form submitted to Firebase successfully');
+              } else {
+                // Fallback: save to localStorage
+                const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                submissions.push({ id: Date.now(), ...formData });
+                localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                console.log('Contact form saved to localStorage');
+              }
+
+              // Show success message
+              showMessage('Thank you for your message! We will get back to you within 24 hours.', 'success');
+              
+              // Reset form
+              contactForm.reset();
+              
+            } catch (error) {
+              console.error('Error submitting contact form:', error);
+              showMessage('There was an error sending your message. Please try again or contact us directly.', 'error');
+            } finally {
+              setLoadingState(false);
+            }
+          });
+        }
+
+        function setLoadingState(loading) {
+          if (loading) {
+            submitButton.disabled = true;
+            submitText.classList.add('hidden');
+            submitLoading.classList.remove('hidden');
+          } else {
+            submitButton.disabled = false;
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+          }
+        }
+
+        function showMessage(message, type) {
+          messageStatus.className = `p-4 rounded-lg text-center ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`;
+          messageStatus.textContent = message;
+          messageStatus.classList.remove('hidden');
+          
+          // Hide message after 5 seconds
+          setTimeout(() => {
+            messageStatus.classList.add('hidden');
+          }, 5000);
+        }
+      });
+
+      // Services Section Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add click handlers for service cards to show more details
+        const serviceCards = document.querySelectorAll('#services .bg-\\[\\#243647\\]');
+        
+        serviceCards.forEach((card, index) => {
+          card.addEventListener('click', function() {
+            showServiceModal(index);
+          });
+          
+          // Add cursor pointer style
+          card.style.cursor = 'pointer';
+        });
+
+        // Schedule Service button functionality
+        const scheduleButton = document.querySelector('#services button');
+        if (scheduleButton) {
+          scheduleButton.addEventListener('click', function() {
+            showScheduleServiceModal();
+          });
+        }
+      });
+
+      function showServiceModal(serviceIndex) {
+        const services = [
+          {
+            title: "Vehicle Sales",
+            description: "Browse our extensive inventory of quality pre-owned vehicles. Each car is thoroughly inspected and comes with a detailed history report.",
+            details: [
+              "Multi-point inspection covering engine, brakes, transmission, and electrical systems",
+              "Comprehensive vehicle history reports from trusted sources",
+              "Competitive financing options with multiple lenders",
+              "Professional trade-in evaluations for your current vehicle",
+              "Extended warranty options available",
+              "White glove delivery service"
+            ],
+            contact: "sales@autoemporium.com"
+          },
+          {
+            title: "Maintenance & Repair",
+            description: "Keep your vehicle running smoothly with our comprehensive maintenance and repair services performed by certified technicians.",
+            details: [
+              "Regular oil changes using premium synthetic oils",
+              "Complete brake system service and repair",
+              "Advanced engine diagnostics with state-of-the-art equipment",
+              "Transmission service including fluid changes and repairs",
+              "Air conditioning and heating system maintenance",
+              "Tire rotation, balancing, and replacement services"
+            ],
+            contact: "service@autoemporium.com"
+          },
+          {
+            title: "Financing Solutions",
+            description: "We work with multiple lenders to secure the best financing options for your vehicle purchase, regardless of your credit situation.",
+            details: [
+              "Competitive interest rates starting as low as 2.9% APR",
+              "Specialized programs for customers with challenging credit",
+              "Quick pre-approval process, often within minutes",
+              "Flexible payment terms from 24 to 84 months",
+              "No prepayment penalties",
+              "Gap insurance and extended warranty financing"
+            ],
+            contact: "finance@autoemporium.com"
+          },
+          {
+            title: "Parts & Accessories",
+            description: "Genuine OEM parts and quality aftermarket accessories to enhance and maintain your vehicle's performance and appearance.",
+            details: [
+              "Genuine OEM replacement parts with manufacturer warranty",
+              "Performance upgrades including exhaust, intake, and suspension",
+              "Interior accessories: floor mats, seat covers, electronics",
+              "Exterior accessories: roof racks, running boards, tonneau covers",
+              "Professional installation by certified technicians",
+              "Special ordering for hard-to-find parts"
+            ],
+            contact: "parts@autoemporium.com"
+          },
+          {
+            title: "Inspection Services",
+            description: "Professional vehicle inspections for peace of mind, whether you're buying, selling, or maintaining your vehicle.",
+            details: [
+              "Comprehensive pre-purchase inspections (150+ point checklist)",
+              "Annual safety inspections as required by state law",
+              "Emissions testing and certification",
+              "Detailed written reports with photos and recommendations",
+              "Insurance inspection services",
+              "Classic and specialty vehicle inspections"
+            ],
+            contact: "inspections@autoemporium.com"
+          },
+          {
+            title: "Emergency Services",
+            description: "24/7 roadside assistance and emergency services to get you back on the road when you need it most.",
+            details: [
+              "24/7 roadside assistance hotline",
+              "Professional towing services within 50 mile radius",
+              "Jump-start service for dead batteries",
+              "Lockout assistance with professional tools",
+              "Flat tire changing and spare tire installation",
+              "Emergency fuel delivery service"
+            ],
+            contact: "emergency@autoemporium.com"
+          }
+        ];
+
+        const service = services[serviceIndex];
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            
+            <h3 class="text-white text-2xl font-bold mb-4">${service.title}</h3>
+            <p class="text-[#92aec8] text-lg mb-6">${service.description}</p>
+            
+            <h4 class="text-white text-lg font-bold mb-4">What's Included:</h4>
+            <ul class="text-[#92aec8] space-y-2 mb-6">
+              ${service.details.map(detail => `<li class="flex items-start space-x-2"><span class="text-[#1473cc] mt-1">•</span><span>${detail}</span></li>`).join('')}
+            </ul>
+            
+            <div class="bg-[#243647] rounded-lg p-4 mb-6">
+              <h4 class="text-white font-bold mb-2">Ready to get started?</h4>
+              <p class="text-[#92aec8] mb-3">Contact our ${service.title.toLowerCase()} team directly:</p>
+              <p class="text-[#1473cc] font-medium">${service.contact}</p>
+              <p class="text-[#92aec8] text-sm mt-1">Or call us at (555) 123-AUTO</p>
+            </div>
+            
+            <div class="flex gap-3">
+              <button onclick="showScheduleServiceModal('${service.title}')" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                Schedule ${service.title}
+              </button>
+              <button onclick="this.closest('.fixed').remove()" class="px-6 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+      }
+
+      function showScheduleServiceModal(serviceType = 'Service') {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+            <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+              &times;
+            </button>
+            
+            <h3 class="text-white text-xl font-bold mb-4">Schedule ${serviceType}</h3>
+            
+            <form class="space-y-4" onsubmit="handleScheduleService(event, '${serviceType}')">
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Your Name *</label>
+                <input type="text" name="customerName" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Email *</label>
+                <input type="email" name="email" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Phone *</label>
+                <input type="tel" name="phone" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Preferred Date *</label>
+                  <input type="date" name="preferredDate" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none" min="${new Date().toISOString().split('T')[0]}">
+                </div>
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Preferred Time *</label>
+                  <select name="preferredTime" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    <option value="">Select Time</option>
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="1:00 PM">1:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="4:00 PM">4:00 PM</option>
+                    <option value="5:00 PM">5:00 PM</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Vehicle Information</label>
+                <input type="text" name="vehicleInfo" placeholder="Year, Make, Model (if applicable)" class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+              </div>
+              
+              <div>
+                <label class="block text-white text-sm font-medium mb-2">Additional Notes</label>
+                <textarea name="notes" rows="3" placeholder="Please describe what you need..." class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+              </div>
+              
+              <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                  Schedule Appointment
+                </button>
+                <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+      }
+
+      async function handleScheduleService(event, serviceType) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Get form values
+        const appointmentData = {
+          customerName: formData.get('customerName') || form.querySelector('input[type="text"]').value,
+          email: formData.get('email') || form.querySelector('input[type="email"]').value,
+          phone: formData.get('phone') || form.querySelector('input[type="tel"]').value,
+          preferredDate: formData.get('preferredDate') || form.querySelector('input[type="date"]').value,
+          preferredTime: formData.get('preferredTime') || form.querySelector('select').value,
+          vehicleInfo: formData.get('vehicleInfo') || form.querySelector('input[placeholder*="Year"]').value || '',
+          notes: formData.get('notes') || form.querySelector('textarea').value || '',
+          serviceType: serviceType,
+          status: 'pending',
+          timestamp: new Date().toISOString(),
+          appointmentId: `APT-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`
+        };
+
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Scheduling...';
+
+        try {
+          // Try to save to Firebase
+          if (db) {
+            await db.collection('service-appointments').add(appointmentData);
+            console.log('Service appointment saved to Firebase successfully');
+          } else {
+            // Fallback: save to localStorage
+            const appointments = JSON.parse(localStorage.getItem('serviceAppointments') || '[]');
+            appointments.push({ id: appointmentData.appointmentId, ...appointmentData });
+            localStorage.setItem('serviceAppointments', JSON.stringify(appointments));
+            console.log('Service appointment saved to localStorage');
+          }
+
+          // Show success message
+          showSuccessToast(`Thank you! Your ${serviceType} appointment has been scheduled. Appointment ID: ${appointmentData.appointmentId}`);
+          form.closest('.fixed').remove();
+          
+        } catch (error) {
+          console.error('Error saving service appointment:', error);
+          showErrorToast('There was an error scheduling your appointment. Please try again or contact us directly.');
+        } finally {
+          // Reset button state
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
+        }
+      }
+
+      // Helper functions for toast notifications
+      function showSuccessToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md';
+        toast.innerHTML = `
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <p class="font-medium">Appointment Scheduled!</p>
+              <p class="text-sm text-green-100 mt-1">${message}</p>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 5000);
+      }
+
+      function showErrorToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-md';
+        toast.innerHTML = `
+          <div class="flex items-start space-x-3">
+            <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <p class="font-medium">Error</p>
+              <p class="text-sm text-red-100 mt-1">${message}</p>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 5000);
+      }
+
+      // About Us Section Functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling animation for statistics
+        const observerOptions = {
+          threshold: 0.5,
+          rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateStatistics();
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+          observer.observe(aboutSection);
+        }
+      });
+
+      function animateStatistics() {
+        const stats = [
+          { element: document.querySelector('#about .text-3xl'), target: 500, suffix: '+' },
+          { element: document.querySelectorAll('#about .text-3xl')[1], target: 1000, suffix: '+' }
+        ];
+
+        stats.forEach(stat => {
+          if (stat.element) {
+            animateNumber(stat.element, stat.target, stat.suffix);
+          }
+        });
+      }
+
+      function animateNumber(element, target, suffix = '') {
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          element.textContent = Math.floor(current) + suffix;
+        }, 30);
+      }
+
+      // Smooth scrolling for navigation links
+      document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('a[href^="#"]');
+        
+        navLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+              const offsetTop = targetElement.offsetTop - 80; // Account for fixed header
+              window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+              });
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

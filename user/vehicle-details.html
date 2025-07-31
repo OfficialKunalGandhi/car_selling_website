@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Details - Auto Emporium</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Detailed information about vehicles at Auto Emporium. View specifications, pricing, and schedule a test drive.">
+    <meta name="keywords" content="vehicle details, car specifications, auto dealership, test drive, vehicle pricing">
+    <meta name="author" content="Auto Emporium">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Vehicle Details - Auto Emporium">
+    <meta property="og:description" content="Detailed information about premium vehicles at Auto Emporium.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://autoemporium.com/vehicle-details">
+    <meta property="og:image" content="https://autoemporium.com/og-image.jpg">
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#111a22] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#243647] px-10 py-3">
+                <div class="flex items-center gap-4 text-white">
+                    <div class="size-4">
+                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+                    </div>
+                    <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
+                        <a href="../index.html">Auto Emporium</a>
+                    </h2>
+                </div>
+                <div class="flex flex-1 justify-end gap-8">
+                    <div class="flex items-center gap-9">
+                        <a class="text-white text-sm font-medium leading-normal" href="../index.html">Home</a>
+                        <a class="text-[#1473cc] text-sm font-medium leading-normal" href="vehicle-details.html">Vehicles</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#services">Services</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#about">About Us</a>
+                        <a class="text-white text-sm font-medium leading-normal" href="#contact">Contact</a>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#243647] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+                            <div class="text-white" data-icon="MagnifyingGlass" data-size="20px" data-weight="regular">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                </svg>
+                            </div>
+                        </button>
+                        <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-[#243647] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+                            <div class="text-white" data-icon="UserCircle" data-size="20px" data-weight="regular">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                    
+                    <!-- Breadcrumb -->
+                    <div class="flex items-center gap-2 text-sm text-[#92aec8] mb-6">
+                        <a href="../index.html" class="hover:text-white transition-colors">Home</a>
+                        <span>›</span>
+                        <span class="text-white">Vehicle Details</span>
+                    </div>
+
+                    <!-- Search and Filter Bar -->
+                    <div class="bg-[#243647] rounded-xl p-6 mb-8">
+                        <h2 class="text-white text-xl font-bold mb-4">Find Your Perfect Vehicle</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Make</label>
+                                <select id="filter-make" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Makes</option>
+                                    <option value="Mercedes-Benz">Mercedes-Benz</option>
+                                    <option value="BMW">BMW</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Tesla">Tesla</option>
+                                    <option value="Audi">Audi</option>
+                                    <option value="Lexus">Lexus</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Price Range</label>
+                                <select id="filter-price" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Prices</option>
+                                    <option value="0-30000">Under $30,000</option>
+                                    <option value="30000-50000">$30,000 - $50,000</option>
+                                    <option value="50000-70000">$50,000 - $70,000</option>
+                                    <option value="70000-100000">$70,000 - $100,000</option>
+                                    <option value="100000+">Over $100,000</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Fuel Type</label>
+                                <select id="filter-fuel" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">All Fuel Types</option>
+                                    <option value="Gasoline">Gasoline</option>
+                                    <option value="Electric">Electric</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Diesel">Diesel</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="applyFilters()" class="w-full bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <input 
+                                type="text" 
+                                id="search-input" 
+                                placeholder="Search vehicles by name, make, model..." 
+                                class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"
+                                onkeyup="searchVehicles()"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-white text-2xl font-bold">All Vehicles</h1>
+                        <div class="flex items-center gap-4">
+                            <span class="text-[#92aec8] text-sm">Sort by:</span>
+                            <select id="sort-options" onchange="sortVehicles()" class="p-2 rounded bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                <option value="name">Name A-Z</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="year">Year: Newest First</option>
+                                <option value="mileage">Mileage: Lowest First</option>
+                            </select>
+                            <div class="flex gap-2">
+                                <button onclick="toggleView('grid')" id="grid-view" class="p-2 rounded bg-[#1473cc] text-white">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                                    </svg>
+                                </button>
+                                <button onclick="toggleView('list')" id="list-view" class="p-2 rounded bg-[#243647] text-white">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicles Grid -->
+                    <div id="vehicles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Vehicles will be loaded here -->
+                        <div class="col-span-full flex items-center justify-center p-8">
+                            <div class="text-[#92aec8] text-base">Loading vehicles...</div>
+                        </div>
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="flex justify-center mt-8">
+                        <button id="load-more-btn" onclick="loadMoreVehicles()" class="bg-[#1473cc] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors" style="display: none;">
+                            Load More Vehicles
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="flex justify-center">
+                <div class="flex max-w-[960px] flex-1 flex-col">
+                    <footer class="flex flex-col gap-6 px-5 py-10 text-center @container">
+                        <div class="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
+                            <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="privacy-policy.html">Privacy Policy</a>
+                            <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="terms-of-service.html">Terms of Service</a>
+                            <a class="text-[#92aec8] text-base font-normal leading-normal min-w-40" href="../index.html#contact">Contact Us</a>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="#" class="text-[#92aec8] hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M247.39,68.94A8,8,0,0,0,240,64H209.57A48.66,48.66,0,0,0,168.1,40a46.91,46.91,0,0,0-33.75,13.7A47.9,47.9,0,0,0,120,88v6.09C79.74,83.47,46.81,50.72,46.46,50.37a8,8,0,0,0-13.65,4.92c-4.31,47.79,9.57,79.77,22,98.18a110.93,110.93,0,0,0,21.88,24.2c-15.23,17.53-39.21,26.74-39.47,26.84a8,8,0,0,0-3.85,11.93c.75,1.12,3.75,5.05,11.08,8.72C53.51,229.7,65.48,232,80,232c70.67,0,129.72-54.42,135.75-124.44l29.91-29.9A8,8,0,0,0,247.39,68.94Zm-45,29.41a8,8,0,0,0-2.32,5.14C196,166.58,143.28,216,80,216c-10.56,0-18-1.4-23.22-3.08,11.51-6.25,27.56-17,37.88-32.48A8,8,0,0,0,92,169.08c-.47-.27-43.91-26.34-44-96,16,13,45.25,33.17,78.67,38.79A8,8,0,0,0,136,104V88a32,32,0,0,1,9.6-22.92A30.94,30.94,0,0,1,167.9,56c12.66.16,24.49,7.88,29.44,19.21A8,8,0,0,0,204.67,80h16Z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-[#92aec8] hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-[#92aec8] hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <p class="text-[#92aec8] text-base font-normal leading-normal">@2024 Auto Emporium. All rights reserved.</p>
+                    </footer>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlRSQJzFqrL-QENTJruiUltcdscOCdGNw",
+            authDomain: "gym-app-bd9c1.firebaseapp.com",
+            projectId: "gym-app-bd9c1",
+            storageBucket: "gym-app-bd9c1.firebasestorage.app",
+            messagingSenderId: "417740582785",
+            appId: "1:417740582785:web:79815f97de1bda79454280",
+            measurementId: "G-T4YJQDXL08"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization failed:', error);
+            db = null;
+        }
+
+        // Global variables
+        let allVehicles = [];
+        let filteredVehicles = [];
+        let currentView = 'grid';
+        let vehiclesPerPage = 12;
+        let currentPage = 1;
+
+        // Sample vehicle data (fallback)
+        const sampleVehicles = [
+            {
+                id: 'sample-1',
+                name: "2023 Luxury Sedan",
+                make: "Mercedes-Benz",
+                model: "C-Class",
+                year: 2023,
+                price: 45000,
+                mileage: 12000,
+                fuelType: "Gasoline",
+                transmission: "Automatic",
+                description: "Sleek design and advanced technology with premium interior",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUSF4WLrfQ-a6MYutTzhj7XjnwALdyx8dcesyMi6-LQDqKcH6jslSjgzJLyXWJj3sjUY3GSveJdEX81zvposWKtjsAdV4NH8Zsfy4fdQZrYmgQxkjjZJk_DhsHYM6YwtGW_SOCBicmAVGfidJZ2eG69IJTXKS77PHSTesQeI7f9BtdU_0L1RVVRa3Nfz5nd5vlhb2KX9whZq24WK8JSkF13BXzDwnb1ZkSnz1E4cBr-mUh_Rmh0psY3arMxbE6rWo22_YUTyuRhJsS",
+                features: ["Leather Seats", "Navigation System", "Sunroof", "Backup Camera"],
+                featured: true,
+                order: 1
+            },
+            {
+                id: 'sample-2',
+                name: "2022 Sports Coupe",
+                make: "BMW",
+                model: "M4",
+                year: 2022,
+                price: 65000,
+                mileage: 8500,
+                fuelType: "Gasoline",
+                transmission: "Manual",
+                description: "High performance and stylish appearance with racing-inspired design",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7vfix40qg1ZRF07iIvzNJQe8G5SlILqmJQILl7QK7clh3aZt94oCULDI8qmYNHZ2G0svMx4p-StKd57BQ45fIXHqqNirqA6IVdP1BFzXbYbYW8VNv3RwQmuXsuZ1qPLjvZKAfz-zzN-SYLZx6Wg54SRuydBdSJDXegHfnJ3cfh0MmiiHYvi5RR7C72RcpaAas2GUWCGSZzVOO2DVSXjhFuTfgOGOIxQMyuKwKwx4x_E7sPTrHNImlwBylqGbxek8m0OPb5wAoBKlm",
+                features: ["Sport Package", "Carbon Fiber Trim", "Performance Brakes", "Track Mode"],
+                featured: true,
+                order: 2
+            },
+            {
+                id: 'sample-3',
+                name: "2023 Family SUV",
+                make: "Toyota",
+                model: "Highlander",
+                year: 2023,
+                price: 38000,
+                mileage: 15000,
+                fuelType: "Hybrid",
+                transmission: "CVT",
+                description: "Spacious interior and powerful engine perfect for families",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5",
+                features: ["3rd Row Seating", "All-Wheel Drive", "Safety Sense 2.0", "Wireless Charging"],
+                featured: true,
+                order: 3
+            },
+            {
+                id: 'sample-4',
+                name: "2024 Electric Vehicle",
+                make: "Tesla",
+                model: "Model 3",
+                year: 2024,
+                price: 52000,
+                mileage: 5000,
+                fuelType: "Electric",
+                transmission: "Single Speed",
+                description: "Eco-friendly and innovative features with cutting-edge technology",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCIaUmyYCiUBxpzwrQdNHmMvbMAkjnZCPX3mMz82NO1j2YtAorY16LWSrYxfvnblm-sWBqsM4lEWVGd5cT6NJweh_PvrDi6_04QakULCqRUKDviuGxdacmHlmaT7vwmp-M7FrsnFH1IO-IM54ogsof89IeIXFdqOl6syDbx66vcAgtzUMMlkhRQWViRngVupJExa0fO1s99T_HH3ZBucaIurjSSfWTT8aOWP6L9MDl6iy4JaQm30DCNs8ZfRI14MFD2C06kfPy-3rS6",
+                features: ["Autopilot", "Supercharging", "Premium Audio", "Glass Roof"],
+                featured: true,
+                order: 4
+            },
+            {
+                id: 'sample-5',
+                name: "2023 Luxury SUV",
+                make: "Audi",
+                model: "Q7",
+                year: 2023,
+                price: 75000,
+                mileage: 9000,
+                fuelType: "Gasoline",
+                transmission: "Automatic",
+                description: "Premium comfort and advanced features for the modern family",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5",
+                features: ["Quattro AWD", "Virtual Cockpit", "Premium Sound", "Adaptive Cruise"],
+                featured: false,
+                order: 5
+            },
+            {
+                id: 'sample-6',
+                name: "2022 Executive Sedan",
+                make: "Lexus",
+                model: "ES 350",
+                year: 2022,
+                price: 42000,
+                mileage: 18000,
+                fuelType: "Gasoline",
+                transmission: "Automatic",
+                description: "Refined luxury with exceptional reliability and comfort",
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUSF4WLrfQ-a6MYutTzhj7XjnwALdyx8dcesyMi6-LQDqKcH6jslSjgzJLyXWJj3sjUY3GSveJdEX81zvposWKtjsAdV4NH8Zsfy4fdQZrYmgQxkjjZJk_DhsHYM6YwtGW_SOCBicmAVGfidJZ2eG69IJTXKS77PHSTesQeI7f9BtdU_0L1RVVRa3Nfz5nd5vlhb2KX9whZq24WK8JSkF13BXzDwnb1ZkSnz1E4cBr-mUh_Rmh0psY3arMxbE6rWo22_YUTyuRhJsS",
+                features: ["Lexus Safety+", "Mark Levinson Audio", "Heated Seats", "Panoramic Roof"],
+                featured: false,
+                order: 6
+            }
+        ];
+
+        // Load vehicles from Firebase or fallback to sample data
+        async function loadVehicles() {
+            console.log('Loading all vehicles...');
+            
+            if (!db) {
+                console.log('Firebase not available, using sample data');
+                allVehicles = sampleVehicles;
+                filteredVehicles = [...allVehicles];
+                displayVehicles();
+                return;
+            }
+
+            try {
+                const snapshot = await db.collection('vehicles').orderBy('order', 'asc').get();
+                
+                if (snapshot.empty) {
+                    console.log('No vehicles in Firebase, using sample data');
+                    allVehicles = sampleVehicles;
+                } else {
+                    allVehicles = [];
+                    snapshot.forEach(doc => {
+                        allVehicles.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+                
+                filteredVehicles = [...allVehicles];
+                displayVehicles();
+                console.log(`Loaded ${allVehicles.length} vehicles`);
+                
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+                console.log('Falling back to sample data');
+                allVehicles = sampleVehicles;
+                filteredVehicles = [...allVehicles];
+                displayVehicles();
+            }
+        }
+
+        // Create vehicle card element
+        function createVehicleCard(vehicle, isListView = false) {
+            const card = document.createElement('div');
+            card.className = isListView 
+                ? 'bg-[#243647] rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 flex gap-4 p-4 cursor-pointer'
+                : 'bg-[#243647] rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer';
+            
+            const imageClass = isListView ? 'w-48 h-32' : 'w-full h-48';
+            const contentClass = isListView ? 'flex-1' : 'p-4';
+            
+            card.innerHTML = `
+                ${isListView ? '' : '<div class="' + imageClass + ' bg-center bg-cover bg-no-repeat" style="background-image: url(\'' + (vehicle.image || 'https://via.placeholder.com/400x300?text=No+Image') + '\');"></div>'}
+                ${isListView ? '<div class="' + imageClass + ' bg-center bg-cover bg-no-repeat rounded-lg" style="background-image: url(\'' + (vehicle.image || 'https://via.placeholder.com/400x300?text=No+Image') + '\');"></div>' : ''}
+                <div class="${contentClass}">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-white text-lg font-bold line-clamp-2">${vehicle.name}</h3>
+                        ${vehicle.featured ? '<span class="bg-[#1473cc] text-white text-xs px-2 py-1 rounded font-semibold">FEATURED</span>' : ''}
+                    </div>
+                    <p class="text-[#92aec8] text-sm mb-3 line-clamp-2">${vehicle.description}</p>
+                    
+                    <div class="grid grid-cols-2 gap-2 text-xs text-[#92aec8] mb-3">
+                        <div>📅 ${vehicle.year}</div>
+                        <div>⛽ ${vehicle.fuelType}</div>
+                        <div>🔧 ${vehicle.transmission}</div>
+                        <div>📍 ${vehicle.mileage?.toLocaleString()} mi</div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="text-[#1473cc] text-xl font-bold">$${vehicle.price?.toLocaleString()}</div>
+                        <div class="flex gap-2">
+                            <button onclick="event.stopPropagation(); showContactModal('${vehicle.id}', '${vehicle.name}')" class="bg-[#1473cc] text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition-colors">
+                                Contact
+                            </button>
+                            <button onclick="event.stopPropagation(); showTestDriveModal('${vehicle.id}', '${vehicle.name}')" class="border border-[#1473cc] text-[#1473cc] text-xs px-3 py-1 rounded hover:bg-[#1473cc] hover:text-white transition-colors">
+                                Test Drive
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => showVehicleDetails(vehicle));
+            return card;
+        }
+
+        // Display vehicles in the container
+        function displayVehicles() {
+            const container = document.getElementById('vehicles-container');
+            const itemsToShow = currentPage * vehiclesPerPage;
+            const vehiclesToShow = filteredVehicles.slice(0, itemsToShow);
+            
+            container.className = currentView === 'grid' 
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+                : 'flex flex-col gap-4';
+            
+            container.innerHTML = '';
+            
+            if (vehiclesToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full flex flex-col items-center justify-center p-8">
+                        <div class="text-[#92aec8] text-lg mb-2">No vehicles found</div>
+                        <div class="text-[#92aec8] text-sm">Try adjusting your search or filter criteria</div>
+                    </div>
+                `;
+                document.getElementById('load-more-btn').style.display = 'none';
+                return;
+            }
+            
+            vehiclesToShow.forEach(vehicle => {
+                const card = createVehicleCard(vehicle, currentView === 'list');
+                container.appendChild(card);
+            });
+            
+            // Show/hide load more button
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            if (itemsToShow < filteredVehicles.length) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        // Search vehicles
+        function searchVehicles() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            filteredVehicles = allVehicles.filter(vehicle => 
+                vehicle.name.toLowerCase().includes(searchTerm) ||
+                vehicle.make.toLowerCase().includes(searchTerm) ||
+                vehicle.model.toLowerCase().includes(searchTerm) ||
+                vehicle.description.toLowerCase().includes(searchTerm)
+            );
+            currentPage = 1;
+            displayVehicles();
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const make = document.getElementById('filter-make').value;
+            const priceRange = document.getElementById('filter-price').value;
+            const fuelType = document.getElementById('filter-fuel').value;
+            
+            filteredVehicles = allVehicles.filter(vehicle => {
+                let matches = true;
+                
+                if (make && vehicle.make !== make) matches = false;
+                if (fuelType && vehicle.fuelType !== fuelType) matches = false;
+                
+                if (priceRange) {
+                    const price = vehicle.price;
+                    switch (priceRange) {
+                        case '0-30000':
+                            if (price >= 30000) matches = false;
+                            break;
+                        case '30000-50000':
+                            if (price < 30000 || price >= 50000) matches = false;
+                            break;
+                        case '50000-70000':
+                            if (price < 50000 || price >= 70000) matches = false;
+                            break;
+                        case '70000-100000':
+                            if (price < 70000 || price >= 100000) matches = false;
+                            break;
+                        case '100000+':
+                            if (price < 100000) matches = false;
+                            break;
+                    }
+                }
+                
+                return matches;
+            });
+            
+            currentPage = 1;
+            displayVehicles();
+        }
+
+        // Sort vehicles
+        function sortVehicles() {
+            const sortBy = document.getElementById('sort-options').value;
+            
+            filteredVehicles.sort((a, b) => {
+                switch (sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'price-low':
+                        return a.price - b.price;
+                    case 'price-high':
+                        return b.price - a.price;
+                    case 'year':
+                        return b.year - a.year;
+                    case 'mileage':
+                        return a.mileage - b.mileage;
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayVehicles();
+        }
+
+        // Toggle view (grid/list)
+        function toggleView(viewType) {
+            currentView = viewType;
+            
+            // Update button states
+            document.getElementById('grid-view').className = viewType === 'grid' 
+                ? 'p-2 rounded bg-[#1473cc] text-white'
+                : 'p-2 rounded bg-[#243647] text-white';
+            document.getElementById('list-view').className = viewType === 'list' 
+                ? 'p-2 rounded bg-[#1473cc] text-white'
+                : 'p-2 rounded bg-[#243647] text-white';
+            
+            displayVehicles();
+        }
+
+        // Load more vehicles
+        function loadMoreVehicles() {
+            currentPage++;
+            displayVehicles();
+        }
+
+        // Show vehicle details modal
+        function showVehicleDetails(vehicle) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="relative">
+                        <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl z-10" onclick="this.closest('.fixed').remove()">
+                            &times;
+                        </button>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+                            <div>
+                                <div class="w-full h-80 bg-center bg-cover bg-no-repeat rounded-xl border-2 border-[#243647] mb-4"
+                                     style="background-image: url('${vehicle.image || 'https://via.placeholder.com/600x400?text=No+Image'}');"></div>
+                                
+                                ${vehicle.features && vehicle.features.length > 0 ? `
+                                    <div>
+                                        <h4 class="text-white font-medium mb-3">Features</h4>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            ${vehicle.features.map(feature => `
+                                                <span class="bg-[#243647] text-[#92aec8] px-3 py-2 rounded text-sm">${feature}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div>
+                                <div class="mb-6">
+                                    <h2 class="text-white text-3xl font-bold mb-2">${vehicle.name}</h2>
+                                    <div class="text-[#1473cc] text-2xl font-bold mb-4">$${vehicle.price?.toLocaleString()}</div>
+                                    <p class="text-[#92aec8] leading-relaxed">${vehicle.description}</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Year</div>
+                                        <div class="text-white font-semibold">${vehicle.year}</div>
+                                    </div>
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Make</div>
+                                        <div class="text-white font-semibold">${vehicle.make}</div>
+                                    </div>
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Model</div>
+                                        <div class="text-white font-semibold">${vehicle.model}</div>
+                                    </div>
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Mileage</div>
+                                        <div class="text-white font-semibold">${vehicle.mileage?.toLocaleString()} mi</div>
+                                    </div>
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Fuel Type</div>
+                                        <div class="text-white font-semibold">${vehicle.fuelType}</div>
+                                    </div>
+                                    <div class="bg-[#243647] p-4 rounded-lg">
+                                        <div class="text-[#92aec8] text-sm">Transmission</div>
+                                        <div class="text-white font-semibold">${vehicle.transmission}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col gap-3">
+                                    <button onclick="showContactModal('${vehicle.id}', '${vehicle.name}')" class="w-full bg-[#1473cc] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                        Contact About This Vehicle
+                                    </button>
+                                    <button onclick="showTestDriveModal('${vehicle.id}', '${vehicle.name}')" class="w-full border border-[#1473cc] text-[#1473cc] px-6 py-3 rounded-lg hover:bg-[#1473cc] hover:text-white transition-colors">
+                                        Schedule Test Drive
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Contact Modal Function
+        function showContactModal(vehicleId, vehicleName) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+                    <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+                        &times;
+                    </button>
+                    
+                    <h3 class="text-white text-xl font-bold mb-4">Contact About: ${vehicleName}</h3>
+                    
+                    <form class="space-y-4" name="vehicleContactForm">
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Your Name *</label>
+                            <input type="text" name="customerName" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Email *</label>
+                            <input type="email" name="customerEmail" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Phone</label>
+                            <input type="tel" name="customerPhone" class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Message</label>
+                            <textarea rows="3" name="message" placeholder="I'm interested in this vehicle..." class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+                        </div>
+                        
+                        <input type="hidden" name="vehicleId" value="${vehicleId}">
+                        <input type="hidden" name="vehicleName" value="${vehicleName}">
+                        <input type="hidden" name="type" value="vehicle-inquiry">
+                        
+                        <div class="flex gap-3">
+                            <button type="submit" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                Send Message
+                            </button>
+                            <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            modal.querySelector('form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleVehicleContact(e, modal);
+            });
+        }
+
+        // Test Drive Modal Function
+        function showTestDriveModal(vehicleId, vehicleName) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-md w-full p-6 relative">
+                    <button class="absolute top-4 right-4 text-[#92aec8] hover:text-white text-2xl" onclick="this.closest('.fixed').remove()">
+                        &times;
+                    </button>
+                    
+                    <h3 class="text-white text-xl font-bold mb-4">Schedule Test Drive: ${vehicleName}</h3>
+                    
+                    <form class="space-y-4" name="testDriveForm">
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Your Name *</label>
+                            <input type="text" name="customerName" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Email *</label>
+                            <input type="email" name="customerEmail" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Phone *</label>
+                            <input type="tel" name="customerPhone" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Preferred Date *</label>
+                                <input type="date" name="preferredDate" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2">Preferred Time *</label>
+                                <select name="preferredTime" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                                    <option value="">Select Time</option>
+                                    <option value="9:00 AM">9:00 AM</option>
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="1:00 PM">1:00 PM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Driver's License Number *</label>
+                            <input type="text" name="licenseNumber" required class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none" placeholder="Required for test drive">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white text-sm font-medium mb-2">Additional Notes</label>
+                            <textarea rows="2" name="notes" placeholder="Any special requirements or questions..." class="w-full p-3 rounded-lg bg-[#243647] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+                        </div>
+                        
+                        <input type="hidden" name="vehicleId" value="${vehicleId}">
+                        <input type="hidden" name="vehicleName" value="${vehicleName}">
+                        <input type="hidden" name="type" value="test-drive">
+                        
+                        <div class="flex gap-3">
+                            <button type="submit" class="flex-1 bg-[#1473cc] text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                                Schedule Test Drive
+                            </button>
+                            <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-3 border border-[#243647] text-[#92aec8] rounded-lg hover:border-[#1473cc] hover:text-white transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Set minimum date to today
+            const dateInput = modal.querySelector('input[type="date"]');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            
+            // Handle form submission
+            modal.querySelector('form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await handleTestDrive(e, modal);
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Vehicle Details page loaded');
+            loadVehicles();
+        });
+
+        // Handle Vehicle Contact Form Submission
+        async function handleVehicleContact(event, modal) {
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                const contactData = {
+                    type: formData.get('type'),
+                    customerName: formData.get('customerName'),
+                    customerEmail: formData.get('customerEmail'),
+                    customerPhone: formData.get('customerPhone') || '',
+                    message: formData.get('message') || '',
+                    vehicleId: formData.get('vehicleId'),
+                    vehicleName: formData.get('vehicleName'),
+                    submittedAt: new Date().toISOString(),
+                    status: 'pending'
+                };
+
+                // Save to Firebase if available
+                if (db) {
+                    try {
+                        const docRef = await db.collection('vehicle-inquiries').add(contactData);
+                        console.log('✅ Vehicle inquiry saved to Firebase:', docRef.id);
+                        showToast('Thank you for your interest! We will contact you shortly.', 'success');
+                    } catch (error) {
+                        console.error('❌ Error saving to Firebase:', error);
+                        // Save to localStorage as fallback
+                        const inquiries = JSON.parse(localStorage.getItem('vehicleInquiries') || '[]');
+                        contactData.id = 'local-' + Date.now();
+                        inquiries.push(contactData);
+                        localStorage.setItem('vehicleInquiries', JSON.stringify(inquiries));
+                        showToast('Thank you for your interest! We will contact you shortly.', 'success');
+                    }
+                } else {
+                    // Save to localStorage as fallback
+                    const inquiries = JSON.parse(localStorage.getItem('vehicleInquiries') || '[]');
+                    contactData.id = 'local-' + Date.now();
+                    inquiries.push(contactData);
+                    localStorage.setItem('vehicleInquiries', JSON.stringify(inquiries));
+                    showToast('Thank you for your interest! We will contact you shortly.', 'success');
+                }
+                
+                // Close modal after short delay
+                setTimeout(() => {
+                    modal.remove();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('❌ Error submitting vehicle inquiry:', error);
+                showToast('Error submitting inquiry. Please try again.', 'error');
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Handle Test Drive Form Submission
+        async function handleTestDrive(event, modal) {
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Scheduling...';
+            submitBtn.disabled = true;
+            
+            try {
+                const testDriveData = {
+                    type: formData.get('type'),
+                    customerName: formData.get('customerName'),
+                    customerEmail: formData.get('customerEmail'),
+                    customerPhone: formData.get('customerPhone'),
+                    preferredDate: formData.get('preferredDate'),
+                    preferredTime: formData.get('preferredTime'),
+                    licenseNumber: formData.get('licenseNumber'),
+                    notes: formData.get('notes') || '',
+                    vehicleId: formData.get('vehicleId'),
+                    vehicleName: formData.get('vehicleName'),
+                    submittedAt: new Date().toISOString(),
+                    status: 'pending'
+                };
+
+                // Save to Firebase if available
+                if (db) {
+                    try {
+                        const docRef = await db.collection('test-drive-requests').add(testDriveData);
+                        console.log('✅ Test drive request saved to Firebase:', docRef.id);
+                        showToast('Test drive scheduled! We will contact you to confirm the appointment.', 'success');
+                    } catch (error) {
+                        console.error('❌ Error saving to Firebase:', error);
+                        // Save to localStorage as fallback
+                        const testDrives = JSON.parse(localStorage.getItem('testDriveRequests') || '[]');
+                        testDriveData.id = 'local-' + Date.now();
+                        testDrives.push(testDriveData);
+                        localStorage.setItem('testDriveRequests', JSON.stringify(testDrives));
+                        showToast('Test drive scheduled! We will contact you to confirm the appointment.', 'success');
+                    }
+                } else {
+                    // Save to localStorage as fallback
+                    const testDrives = JSON.parse(localStorage.getItem('testDriveRequests') || '[]');
+                    testDriveData.id = 'local-' + Date.now();
+                    testDrives.push(testDriveData);
+                    localStorage.setItem('testDriveRequests', JSON.stringify(testDrives));
+                    showToast('Test drive scheduled! We will contact you to confirm the appointment.', 'success');
+                }
+                
+                // Close modal after short delay
+                setTimeout(() => {
+                    modal.remove();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('❌ Error submitting test drive request:', error);
+                showToast('Error scheduling test drive. Please try again.', 'error');
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                toast.classList.add('bg-green-600');
+            } else if (type === 'error') {
+                toast.classList.add('bg-red-600');
+            } else {
+                toast.classList.add('bg-blue-600');
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

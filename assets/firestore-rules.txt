@@ -1,0 +1,34 @@
+// Firestore Security Rules for Auto Emporium Team Management
+// Copy these rules to your Firebase Console > Firestore Database > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to team collection for everyone (public viewing)
+    // Allow write access for development (change this for production)
+    match /team/{teamId} {
+      allow read: if true;
+      allow write: if true; // For development only
+    }
+    
+    // For production, consider implementing authentication:
+    // match /team/{teamId} {
+    //   allow read: if true;
+    //   allow write: if request.auth != null; // Only authenticated users can write
+    // }
+  }
+}
+
+// Instructions:
+// 1. Go to Firebase Console: https://console.firebase.google.com/
+// 2. Select your project: gym-app-bd9c1
+// 3. Go to "Firestore Database" in the left sidebar
+// 4. Click on the "Rules" tab
+// 5. Replace the existing rules with the rules above
+// 6. Click "Publish" to save the changes
+
+// Note: The current rules allow anyone to read and write data.
+// This is fine for development, but for production you should:
+// 1. Set up Firebase Authentication
+// 2. Restrict write access to authenticated admin users only
+// 3. Keep read access public for website visitors

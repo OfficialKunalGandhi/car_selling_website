@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>Team Admin - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <h1 class="text-white text-2xl font-bold">Team Management</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-[#1473cc] text-sm font-medium">Team Admin</span>
+                    <a href="vehicles-admin.html" class="text-[#92aec8] text-sm font-medium hover:text-white transition-colors">Vehicles Admin</a>
+                    <a href="slides-admin.html" class="text-[#92aec8] text-sm font-medium hover:text-white transition-colors">Slides Admin</a>
+                    <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Website</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-6xl mx-auto p-6">
+            <!-- Add Team Member Form -->
+            <div class="bg-[#243647] rounded-xl p-6 mb-8">
+                <h2 class="text-white text-xl font-bold mb-4">Add New Team Member</h2>
+                <form id="team-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Name</label>
+                        <input type="text" id="name" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Position</label>
+                        <input type="text" id="position" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Email</label>
+                        <input type="email" id="email" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Phone</label>
+                        <input type="tel" id="phone" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Photo URL</label>
+                        <input type="url" id="photo" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Years of Experience</label>
+                        <input type="number" id="experience" min="0" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Display Order</label>
+                        <input type="number" id="order" min="1" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label class="block text-white text-sm font-medium mb-2">Bio</label>
+                        <textarea id="bio" rows="3" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <button type="submit" class="bg-[#1473cc] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                            Add Team Member
+                        </button>
+                        <button type="button" id="cancel-edit" class="ml-3 bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors hidden">
+                            Cancel Edit
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Team Members List -->
+            <div class="bg-[#243647] rounded-xl p-6">
+                <h2 class="text-white text-xl font-bold mb-4">Current Team Members</h2>
+                <div id="team-list" class="space-y-4">
+                    <div class="text-[#92aec8] text-center py-8">Loading team members...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration - Updated with actual project credentials
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlRSQJzFqrL-QENTJruiUltcdscOCdGNw",
+            authDomain: "gym-app-bd9c1.firebaseapp.com",
+            projectId: "gym-app-bd9c1",
+            storageBucket: "gym-app-bd9c1.firebasestorage.app",
+            messagingSenderId: "417740582785",
+            appId: "1:417740582785:web:79815f97de1bda79454280",
+            measurementId: "G-T4YJQDXL08"
+        };
+ 
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let editingMemberId = null;
+        const form = document.getElementById('team-form');
+        const teamList = document.getElementById('team-list');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+
+        // Load team members
+        async function loadTeamMembers() {
+            try {
+                const snapshot = await db.collection('team').orderBy('order', 'asc').get();
+                
+                if (snapshot.empty) {
+                    teamList.innerHTML = '<div class="text-[#92aec8] text-center py-8">No team members found.</div>';
+                    return;
+                }
+
+                teamList.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const member = doc.data();
+                    const memberElement = createTeamMemberListItem(member, doc.id);
+                    teamList.appendChild(memberElement);
+                });
+            } catch (error) {
+                console.error('Error loading team members:', error);
+                teamList.innerHTML = '<div class="text-red-400 text-center py-8">Error loading team members.</div>';
+            }
+        }
+
+        // Create team member list item
+        function createTeamMemberListItem(member, memberId) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-4 bg-[#111a22] rounded-lg border border-[#92aec8]';
+            
+            div.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-center bg-cover rounded-full border-2 border-[#92aec8]" 
+                         style="background-image: url('${member.photo || 'https://via.placeholder.com/64x64?text=No+Photo'}');"></div>
+                    <div>
+                        <h3 class="text-white font-medium">${member.name}</h3>
+                        <p class="text-[#92aec8] text-sm">${member.position}</p>
+                        <p class="text-[#92aec8] text-sm">${member.email}</p>
+                        <p class="text-[#92aec8] text-xs">Order: ${member.order}</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="editMember('${memberId}')" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                        Edit
+                    </button>
+                    <button onclick="deleteMember('${memberId}', '${member.name}')" class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
+                        Delete
+                    </button>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Add/Update team member
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const memberData = {
+                name: document.getElementById('name').value,
+                position: document.getElementById('position').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value || null,
+                photo: document.getElementById('photo').value || null,
+                experience: parseInt(document.getElementById('experience').value) || null,
+                bio: document.getElementById('bio').value || null,
+                order: parseInt(document.getElementById('order').value)
+            };
+
+            try {
+                if (editingMemberId) {
+                    await db.collection('team').doc(editingMemberId).update(memberData);
+                    alert('Team member updated successfully!');
+                    cancelEdit();
+                } else {
+                    await db.collection('team').add(memberData);
+                    alert('Team member added successfully!');
+                }
+                
+                form.reset();
+                loadTeamMembers();
+            } catch (error) {
+                console.error('Error saving team member:', error);
+                alert('Error saving team member. Please try again.');
+            }
+        });
+
+        // Edit team member
+        async function editMember(memberId) {
+            try {
+                const doc = await db.collection('team').doc(memberId).get();
+                if (doc.exists) {
+                    const member = doc.data();
+                    
+                    document.getElementById('name').value = member.name || '';
+                    document.getElementById('position').value = member.position || '';
+                    document.getElementById('email').value = member.email || '';
+                    document.getElementById('phone').value = member.phone || '';
+                    document.getElementById('photo').value = member.photo || '';
+                    document.getElementById('experience').value = member.experience || '';
+                    document.getElementById('bio').value = member.bio || '';
+                    document.getElementById('order').value = member.order || '';
+                    
+                    editingMemberId = memberId;
+                    cancelEditBtn.classList.remove('hidden');
+                    form.querySelector('button[type="submit"]').textContent = 'Update Team Member';
+                }
+            } catch (error) {
+                console.error('Error loading member for edit:', error);
+                alert('Error loading member data.');
+            }
+        }
+
+        // Cancel edit
+        function cancelEdit() {
+            editingMemberId = null;
+            form.reset();
+            cancelEditBtn.classList.add('hidden');
+            form.querySelector('button[type="submit"]').textContent = 'Add Team Member';
+        }
+
+        cancelEditBtn.addEventListener('click', cancelEdit);
+
+        // Delete team member
+        async function deleteMember(memberId, memberName) {
+            if (confirm(`Are you sure you want to delete ${memberName}?`)) {
+                try {
+                    await db.collection('team').doc(memberId).delete();
+                    alert('Team member deleted successfully!');
+                    loadTeamMembers();
+                } catch (error) {
+                    console.error('Error deleting team member:', error);
+                    alert('Error deleting team member. Please try again.');
+                }
+            }
+        }
+
+        // Initialize sample data
+        async function initializeSampleData() {
+            const sampleTeamMembers = [
+                {
+                    name: "Liam Carter",
+                    position: "Sales Manager",
+                    email: "liam.carter@autoemporium.com",
+                    phone: "(555) 123-0001",
+                    photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHtqIxUvv_JqZ0FgnZT2AbAl8LUi9XoqCA8DsDYsT33yJ2oGrAy1QDcaNA8hnZLT6vHyhIYCdNmAWCntv3dRWk_xko_zszlHwLtF2aZUxknob71d7oOfcy6UiHkISokFlxMMmoZKtT84sSIez_RJBBzaICSkXYo02cD7mSrW3SSg-bBvfKl5HWWSYcgN2n8QJD2G2p0TdhrjH81fiM1y2KQwK8wIyFzxOyzuxvHu2H-sIyLX-DtJr8antCJVeouzMeYb_esuhQwdaB",
+                    experience: 8,
+                    bio: "Liam has been with Auto Emporium for over 8 years, helping customers find their perfect vehicle. His expertise in automotive sales and customer service makes him a valuable asset to our team.",
+                    order: 1
+                },
+                {
+                    name: "Olivia Hayes",
+                    position: "Service Advisor",
+                    email: "olivia.hayes@autoemporium.com",
+                    phone: "(555) 123-0002",
+                    photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuDnaM-gcasCMhcDoo0Vg7joycrDdE6MSEC6HMbVM_5QWFAMhHdBwmeoooRzmhzMIOXDXW7q6yYzD1EqCX-EFkPkubShvPsTMBna6J-_Xcpwnst8AEWWlcXbccoGg6Lpcm7MbigufqmMx1G4lXygDZdAv6Pg2Av48W0f7-JkV1sLI9FOnoy8DPs03oF5lcgRjm0L2CMcsrBC4ZpjvowwlzRx8du2Va4GwVW7KvXs4B5Xr2lUyNC7jTH2NqeBIM1Ef5bx3YN0FU9VIUK7",
+                    experience: 5,
+                    bio: "Olivia ensures that every customer receives top-notch service for their vehicle. With her attention to detail and technical knowledge, she coordinates all service appointments and keeps customers informed throughout the process.",
+                    order: 2
+                },
+                {
+                    name: "Noah Foster",
+                    position: "Lead Technician",
+                    email: "noah.foster@autoemporium.com",
+                    phone: "(555) 123-0003",
+                    photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuAD0Tlk6Im_7ph6XeB4Tgxr-N8KHlC9KJe8_JduQSTryvIPGw4qB6M3X7eBr46akwVpsxrwZf0v4a6xRGo36vbQckTVJN2hvjV7l7srVoAy5rp5OwZHegTpIZzTKUOapODll12jcxDHUoNDMyrbA7Bmi8ixCj7lkWTQPX7P3CM1AOPKyoCPoa3XctET3cn59U_DohgfBe-8KJ8qfal0eltUi5IT1J-fGx7UmyT996w67YnRb4N9K9mAKG3ovsO2KRgZFG7pGR1sGIiD",
+                    experience: 12,
+                    bio: "Noah is our most experienced technician with over 12 years in automotive repair. He specializes in both modern and classic vehicles, ensuring every car that comes through our service department receives expert care.",
+                    order: 3
+                }
+            ];
+
+            try {
+                for (const member of sampleTeamMembers) {
+                    await db.collection('team').add(member);
+                }
+                alert('Sample team data initialized successfully!');
+                loadTeamMembers();
+            } catch (error) {
+                console.error('Error initializing sample data:', error);
+                alert('Error initializing sample data.');
+            }
+        }
+
+        // Load team members on page load
+        document.addEventListener('DOMContentLoaded', loadTeamMembers);
+
+        // Global functions for onclick handlers
+        window.editMember = editMember;
+        window.deleteMember = deleteMember;
+        window.initializeSampleData = initializeSampleData;
+    </script>
+
+    <!-- Initialize Sample Data Button (remove after first use) -->
+    <div class="fixed bottom-4 right-4">
+        <button onclick="initializeSampleData()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+            Initialize Sample Data
+        </button>
+    </div>
+</body>
+</html>

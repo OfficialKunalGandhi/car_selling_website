@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>Vehicle Admin - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-white text-2xl font-bold">Vehicle Management</h1>
+                    <div id="firebase-status" class="flex items-center gap-2">
+                        <div id="status-indicator" class="w-3 h-3 rounded-full bg-gray-500"></div>
+                        <span id="status-text" class="text-sm text-gray-400">Connecting...</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="admin.html" class="text-[#92aec8] text-sm font-medium hover:text-white transition-colors">Team Admin</a>
+                    <span class="text-[#1473cc] text-sm font-medium">Vehicles Admin</span>
+                    <a href="slides-admin.html" class="text-[#92aec8] text-sm font-medium hover:text-white transition-colors">Slides Admin</a>
+                    <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Website</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Stats -->
+        <div class="max-w-6xl mx-auto p-6 pb-0">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-[#243647] rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm">Total Vehicles</p>
+                            <p id="total-vehicles" class="text-white text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-[#1473cc] p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[#243647] rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm">Featured</p>
+                            <p id="featured-vehicles" class="text-white text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-yellow-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[#243647] rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm">Available</p>
+                            <p id="available-vehicles" class="text-white text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-green-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[#243647] rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm">Avg. Price</p>
+                            <p id="avg-price" class="text-white text-2xl font-bold">$0</p>
+                        </div>
+                        <div class="bg-purple-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto p-6">
+            <!-- Add Vehicle Form -->
+            <div class="bg-[#243647] rounded-xl p-6 mb-8">
+                <h2 class="text-white text-xl font-bold mb-4">Add New Vehicle</h2>
+                <form id="vehicle-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Vehicle Name</label>
+                        <input type="text" id="name" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Make</label>
+                        <input type="text" id="make" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Model</label>
+                        <input type="text" id="model" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Year</label>
+                        <input type="number" id="year" min="1900" max="2030" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Price ($)</label>
+                        <input type="number" id="price" min="0" step="100" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Mileage</label>
+                        <input type="number" id="mileage" min="0" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Fuel Type</label>
+                        <select id="fuelType" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                            <option value="">Select Fuel Type</option>
+                            <option value="Gasoline">Gasoline</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Plug-in Hybrid">Plug-in Hybrid</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Transmission</label>
+                        <select id="transmission" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                            <option value="">Select Transmission</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Automatic">Automatic</option>
+                            <option value="CVT">CVT</option>
+                            <option value="Single Speed">Single Speed (Electric)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Display Order</label>
+                        <input type="number" id="order" min="1" required class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">VIN (Vehicle Identification Number)</label>
+                        <input type="text" id="vin" maxlength="17" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-sm font-medium mb-2">Stock Number</label>
+                        <input type="text" id="stockNumber" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">Primary Image URL</label>
+                        <input type="url" id="image" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">Additional Images (comma-separated URLs)</label>
+                        <input type="text" id="additionalImages" placeholder="https://image1.jpg, https://image2.jpg, ..." class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">SEO Description</label>
+                        <textarea id="seoDescription" rows="2" placeholder="SEO-friendly description for search engines..." class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">Vehicle Description</label>
+                        <textarea id="description" rows="3" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none"></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">Features (comma-separated)</label>
+                        <input type="text" id="features" placeholder="e.g., Leather Seats, Navigation, Sunroof, Bluetooth, Backup Camera" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <label class="block text-white text-sm font-medium mb-2">SEO Keywords (comma-separated)</label>
+                        <input type="text" id="seoKeywords" placeholder="e.g., luxury sedan, low mileage, certified pre-owned" class="w-full p-3 rounded-lg bg-[#111a22] text-white border border-[#92aec8] focus:border-[#1473cc] focus:outline-none">
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="featured" class="w-4 h-4 text-[#1473cc] bg-[#111a22] border-[#92aec8] rounded focus:ring-[#1473cc]">
+                            <label for="featured" class="text-white text-sm font-medium">Featured Vehicle</label>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="certified" class="w-4 h-4 text-[#1473cc] bg-[#111a22] border-[#92aec8] rounded focus:ring-[#1473cc]">
+                            <label for="certified" class="text-white text-sm font-medium">Certified Pre-Owned</label>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="available" checked class="w-4 h-4 text-[#1473cc] bg-[#111a22] border-[#92aec8] rounded focus:ring-[#1473cc]">
+                            <label for="available" class="text-white text-sm font-medium">Available for Sale</label>
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-2 lg:col-span-3 flex gap-3">
+                        <button type="submit" class="bg-[#1473cc] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                            Add Vehicle
+                        </button>
+                        <button type="button" id="cancel-edit" class="bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors hidden">
+                            Cancel Edit
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Vehicle List -->
+            <div class="bg-[#243647] rounded-xl p-6">
+                <h2 class="text-white text-xl font-bold mb-4">Current Vehicles</h2>
+                <div id="vehicle-list" class="space-y-4">
+                    <div class="text-[#92aec8] text-center py-8">Loading vehicles...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlRSQJzFqrL-QENTJruiUltcdscOCdGNw",
+            authDomain: "gym-app-bd9c1.firebaseapp.com",
+            projectId: "gym-app-bd9c1",
+            storageBucket: "gym-app-bd9c1.firebasestorage.app",
+            messagingSenderId: "417740582785",
+            appId: "1:417740582785:web:79815f97de1bda79454280",
+            measurementId: "G-T4YJQDXL08"
+        };
+
+        // Initialize Firebase with error handling
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('Firebase initialized successfully');
+            updateConnectionStatus('connecting', 'Connecting...');
+            
+            // Test Firebase connection
+            db.collection('vehicles').limit(1).get()
+                .then(() => {
+                    console.log('Firebase connection verified');
+                    updateConnectionStatus('connected', 'Connected');
+                })
+                .catch(error => {
+                    console.error('Firebase connection test failed:', error);
+                    updateConnectionStatus('error', 'Connection Failed');
+                });
+                
+        } catch (error) {
+            console.error('Firebase initialization failed:', error);
+            updateConnectionStatus('error', 'Initialization Failed');
+            alert('Firebase connection failed. Some features may not work properly.');
+        }
+
+        // Update connection status indicator
+        function updateConnectionStatus(status, message) {
+            const indicator = document.getElementById('status-indicator');
+            const text = document.getElementById('status-text');
+            
+            if (indicator && text) {
+                text.textContent = message;
+                
+                switch(status) {
+                    case 'connected':
+                        indicator.className = 'w-3 h-3 rounded-full bg-green-500';
+                        break;
+                    case 'connecting':
+                        indicator.className = 'w-3 h-3 rounded-full bg-yellow-500';
+                        break;
+                    case 'error':
+                        indicator.className = 'w-3 h-3 rounded-full bg-red-500';
+                        break;
+                    default:
+                        indicator.className = 'w-3 h-3 rounded-full bg-gray-500';
+                }
+            }
+        }
+
+        let editingVehicleId = null;
+        const form = document.getElementById('vehicle-form');
+        const vehicleList = document.getElementById('vehicle-list');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+
+        // Load vehicles
+        async function loadVehicles() {
+            if (!db) {
+                console.error('Firebase not initialized');
+                vehicleList.innerHTML = '<div class="text-red-400 text-center py-8">Firebase connection failed. Please refresh the page.</div>';
+                updateDashboardStats([]);
+                return;
+            }
+            
+            try {
+                console.log('Loading vehicles from Firebase...');
+                const snapshot = await db.collection('vehicles').orderBy('order', 'asc').get();
+                
+                if (snapshot.empty) {
+                    vehicleList.innerHTML = '<div class="text-[#92aec8] text-center py-8">No vehicles found. <button onclick="initializeSampleVehicleData()" class="text-[#1473cc] underline ml-2">Add sample data</button></div>';
+                    updateDashboardStats([]);
+                    return;
+                }
+
+                vehicleList.innerHTML = '';
+                const vehicles = [];
+                
+                snapshot.forEach(doc => {
+                    const vehicle = doc.data();
+                    vehicles.push(vehicle);
+                    const vehicleElement = createVehicleListItem(vehicle, doc.id);
+                    vehicleList.appendChild(vehicleElement);
+                });
+                
+                console.log(`Loaded ${vehicles.length} vehicles successfully`);
+                updateDashboardStats(vehicles);
+                
+            } catch (error) {
+                console.error('Error loading vehicles:', error);
+                
+                let errorMessage = 'Error loading vehicles. ';
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Permission denied. Please check Firebase security rules.';
+                } else if (error.code === 'unavailable') {
+                    errorMessage += 'Firebase service unavailable. Please try again later.';
+                } else {
+                    errorMessage += 'Please check your internet connection and try again.';
+                }
+                
+                vehicleList.innerHTML = `<div class="text-red-400 text-center py-8">${errorMessage}</div>`;
+                updateDashboardStats([]);
+            }
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats(vehicles) {
+            const totalVehicles = vehicles.length;
+            const featuredVehicles = vehicles.filter(v => v.featured).length;
+            const availableVehicles = vehicles.filter(v => v.available !== false).length; // default to available
+            
+            // Calculate average price (only for vehicles with prices)
+            const vehiclesWithPrices = vehicles.filter(v => v.price && v.price > 0);
+            const avgPrice = vehiclesWithPrices.length > 0 
+                ? Math.round(vehiclesWithPrices.reduce((sum, v) => sum + v.price, 0) / vehiclesWithPrices.length)
+                : 0;
+
+            // Update DOM elements
+            document.getElementById('total-vehicles').textContent = totalVehicles;
+            document.getElementById('featured-vehicles').textContent = featuredVehicles;
+            document.getElementById('available-vehicles').textContent = availableVehicles;
+            document.getElementById('avg-price').textContent = avgPrice > 0 ? `$${avgPrice.toLocaleString()}` : '$0';
+            
+            console.log(`Dashboard updated: ${totalVehicles} total, ${featuredVehicles} featured, ${availableVehicles} available, avg: $${avgPrice}`);
+        }
+
+        // Create vehicle list item
+        function createVehicleListItem(vehicle, vehicleId) {
+            const div = document.createElement('div');
+            div.className = 'flex flex-col lg:flex-row items-start lg:items-center justify-between p-4 bg-[#111a22] rounded-lg border border-[#92aec8] gap-4';
+            
+            div.innerHTML = `
+                <div class="flex items-center space-x-4 flex-1">
+                    <div class="w-24 h-20 bg-center bg-cover rounded border-2 border-[#92aec8] flex-shrink-0" 
+                         style="background-image: url('${vehicle.image || 'https://via.placeholder.com/96x80?text=No+Image'}');"></div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h3 class="text-white font-medium text-lg">${vehicle.name}</h3>
+                            ${vehicle.featured ? '<span class="bg-[#1473cc] text-white text-xs px-2 py-1 rounded font-semibold">FEATURED</span>' : ''}
+                            ${vehicle.certified ? '<span class="bg-green-600 text-white text-xs px-2 py-1 rounded font-semibold">CERTIFIED</span>' : ''}
+                            ${!vehicle.available ? '<span class="bg-red-600 text-white text-xs px-2 py-1 rounded font-semibold">SOLD</span>' : ''}
+                        </div>
+                        <p class="text-[#92aec8] text-sm">${vehicle.year} ${vehicle.make} ${vehicle.model}</p>
+                        <p class="text-[#1473cc] text-lg font-bold">${vehicle.price ? '$' + vehicle.price.toLocaleString() : 'Price on request'}</p>
+                        
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-2 text-xs text-[#92aec8]">
+                            <span>🔢 Order: ${vehicle.order}</span>
+                            ${vehicle.mileage ? `<span>🔄 ${vehicle.mileage.toLocaleString()} mi</span>` : '<span>🔄 Mileage: N/A</span>'}
+                            ${vehicle.fuelType ? `<span>⛽ ${vehicle.fuelType}</span>` : '<span>⛽ Fuel: N/A</span>'}
+                            ${vehicle.stockNumber ? `<span>📋 Stock: ${vehicle.stockNumber}</span>` : '<span>📋 No Stock #</span>'}
+                        </div>
+                        
+                        ${vehicle.vin ? `<p class="text-[#92aec8] text-xs mt-1 truncate">VIN: ${vehicle.vin}</p>` : ''}
+                        
+                        ${vehicle.features && vehicle.features.length > 0 ? `
+                            <div class="mt-2">
+                                <div class="flex flex-wrap gap-1">
+                                    ${vehicle.features.slice(0, 3).map(feature => `<span class="bg-[#243647] text-[#92aec8] text-xs px-2 py-1 rounded">${feature}</span>`).join('')}
+                                    ${vehicle.features.length > 3 ? `<span class="text-[#92aec8] text-xs px-2 py-1">+${vehicle.features.length - 3} more</span>` : ''}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div class="flex flex-row lg:flex-col gap-2 w-full lg:w-auto">
+                    <button onclick="editVehicle('${vehicleId}')" class="flex-1 lg:flex-initial px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                        Edit
+                    </button>
+                    <button onclick="deleteVehicle('${vehicleId}', '${vehicle.name}')" class="flex-1 lg:flex-initial px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
+                        Delete
+                    </button>
+                    <button onclick="duplicateVehicle('${vehicleId}')" class="flex-1 lg:flex-initial px-4 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors">
+                        Duplicate
+                    </button>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Add/Update vehicle
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            console.log('Form submission started...');
+            
+            // Validate required fields
+            const name = document.getElementById('name').value.trim();
+            const make = document.getElementById('make').value.trim();
+            const model = document.getElementById('model').value.trim();
+            const year = document.getElementById('year').value;
+            const order = document.getElementById('order').value;
+            
+            if (!name || !make || !model || !year || !order) {
+                alert('Please fill in all required fields: Vehicle Name, Make, Model, Year, and Display Order.');
+                return;
+            }
+            
+            const featuresInput = document.getElementById('features').value;
+            const features = featuresInput ? featuresInput.split(',').map(f => f.trim()).filter(f => f) : [];
+            
+            const additionalImagesInput = document.getElementById('additionalImages').value;
+            const additionalImages = additionalImagesInput ? additionalImagesInput.split(',').map(img => img.trim()).filter(img => img) : [];
+            
+            const keywordsInput = document.getElementById('seoKeywords').value;
+            const seoKeywords = keywordsInput ? keywordsInput.split(',').map(k => k.trim()).filter(k => k) : [];
+            
+            const vehicleData = {
+                name: name,
+                make: make,
+                model: model,
+                year: parseInt(year),
+                price: parseInt(document.getElementById('price').value) || 0,
+                mileage: parseInt(document.getElementById('mileage').value) || 0,
+                fuelType: document.getElementById('fuelType').value || '',
+                transmission: document.getElementById('transmission').value || '',
+                description: document.getElementById('description').value || '',
+                seoDescription: document.getElementById('seoDescription').value || '',
+                image: document.getElementById('image').value || '',
+                additionalImages: additionalImages,
+                features: features,
+                seoKeywords: seoKeywords,
+                vin: document.getElementById('vin').value || '',
+                stockNumber: document.getElementById('stockNumber').value || '',
+                featured: document.getElementById('featured').checked,
+                certified: document.getElementById('certified').checked,
+                available: document.getElementById('available').checked,
+                order: parseInt(order),
+                lastUpdated: new Date().toISOString()
+            };
+
+            // Only add dateAdded for new vehicles (not during updates)
+            if (!editingVehicleId) {
+                vehicleData.dateAdded = new Date().toISOString();
+            }
+
+            console.log('Vehicle data prepared:', vehicleData);
+
+            try {
+                // Check Firebase connection
+                if (!db) {
+                    throw new Error('Firebase not initialized');
+                }
+                
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = editingVehicleId ? 'Updating...' : 'Adding...';
+                
+                if (editingVehicleId) {
+                    console.log('Updating vehicle:', editingVehicleId);
+                    await db.collection('vehicles').doc(editingVehicleId).update(vehicleData);
+                    alert('Vehicle updated successfully!');
+                    cancelEdit();
+                } else {
+                    console.log('Adding new vehicle...');
+                    const docRef = await db.collection('vehicles').add(vehicleData);
+                    console.log('Vehicle added with ID:', docRef.id);
+                    alert('Vehicle added successfully!');
+                }
+                
+                form.reset();
+                await loadVehicles(); // Reload vehicles and update stats
+                
+                submitButton.disabled = false;
+                submitButton.textContent = editingVehicleId ? 'Update Vehicle' : 'Add Vehicle';
+                
+            } catch (error) {
+                console.error('Detailed error saving vehicle:', error);
+                
+                let errorMessage = 'Error saving vehicle. ';
+                
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Permission denied. Please check your Firebase security rules.';
+                } else if (error.code === 'unavailable') {
+                    errorMessage += 'Firebase service is currently unavailable. Please try again later.';
+                } else if (error.code === 'unauthenticated') {
+                    errorMessage += 'Authentication required. Please check your Firebase configuration.';
+                } else if (error.message.includes('Firebase not initialized')) {
+                    errorMessage += 'Firebase connection failed. Please refresh the page.';
+                } else {
+                    errorMessage += error.message || 'Please try again.';
+                }
+                
+                alert(errorMessage);
+                
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = false;
+                submitButton.textContent = editingVehicleId ? 'Update Vehicle' : 'Add Vehicle';
+            }
+        });
+
+        // Edit vehicle
+        async function editVehicle(vehicleId) {
+            try {
+                const doc = await db.collection('vehicles').doc(vehicleId).get();
+                if (doc.exists) {
+                    const vehicle = doc.data();
+                    
+                    document.getElementById('name').value = vehicle.name || '';
+                    document.getElementById('make').value = vehicle.make || '';
+                    document.getElementById('model').value = vehicle.model || '';
+                    document.getElementById('year').value = vehicle.year || '';
+                    document.getElementById('price').value = vehicle.price || '';
+                    document.getElementById('mileage').value = vehicle.mileage || '';
+                    document.getElementById('fuelType').value = vehicle.fuelType || '';
+                    document.getElementById('transmission').value = vehicle.transmission || '';
+                    document.getElementById('description').value = vehicle.description || '';
+                    document.getElementById('seoDescription').value = vehicle.seoDescription || '';
+                    document.getElementById('image').value = vehicle.image || '';
+                    document.getElementById('additionalImages').value = vehicle.additionalImages ? vehicle.additionalImages.join(', ') : '';
+                    document.getElementById('features').value = vehicle.features ? vehicle.features.join(', ') : '';
+                    document.getElementById('seoKeywords').value = vehicle.seoKeywords ? vehicle.seoKeywords.join(', ') : '';
+                    document.getElementById('vin').value = vehicle.vin || '';
+                    document.getElementById('stockNumber').value = vehicle.stockNumber || '';
+                    document.getElementById('featured').checked = vehicle.featured || false;
+                    document.getElementById('certified').checked = vehicle.certified || false;
+                    document.getElementById('available').checked = vehicle.available !== false; // default to true
+                    document.getElementById('order').value = vehicle.order || '';
+                    
+                    editingVehicleId = vehicleId;
+                    cancelEditBtn.classList.remove('hidden');
+                    form.querySelector('button[type="submit"]').textContent = 'Update Vehicle';
+                }
+            } catch (error) {
+                console.error('Error loading vehicle for edit:', error);
+                alert('Error loading vehicle data.');
+            }
+        }
+
+        // Cancel edit
+        function cancelEdit() {
+            editingVehicleId = null;
+            form.reset();
+            cancelEditBtn.classList.add('hidden');
+            form.querySelector('button[type="submit"]').textContent = 'Add Vehicle';
+        }
+
+        cancelEditBtn.addEventListener('click', cancelEdit);
+
+        // Delete vehicle
+        async function deleteVehicle(vehicleId, vehicleName) {
+            if (confirm(`Are you sure you want to delete ${vehicleName}?`)) {
+                try {
+                    await db.collection('vehicles').doc(vehicleId).delete();
+                    alert('Vehicle deleted successfully!');
+                    await loadVehicles(); // Reload vehicles and update stats
+                } catch (error) {
+                    console.error('Error deleting vehicle:', error);
+                    alert('Error deleting vehicle. Please try again.');
+                }
+            }
+        }
+
+        // Duplicate vehicle
+        async function duplicateVehicle(vehicleId) {
+            try {
+                const doc = await db.collection('vehicles').doc(vehicleId).get();
+                if (doc.exists) {
+                    const vehicle = doc.data();
+                    
+                    // Create a new vehicle with modified name and incremented order
+                    const duplicatedVehicle = {
+                        ...vehicle,
+                        name: vehicle.name + ' (Copy)',
+                        order: vehicle.order + 1000, // Give it a high order number
+                        stockNumber: vehicle.stockNumber ? vehicle.stockNumber + '-COPY' : null,
+                        dateAdded: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString()
+                    };
+                    
+                    await db.collection('vehicles').add(duplicatedVehicle);
+                    alert('Vehicle duplicated successfully!');
+                    await loadVehicles(); // Reload vehicles and update stats
+                }
+            } catch (error) {
+                console.error('Error duplicating vehicle:', error);
+                alert('Error duplicating vehicle. Please try again.');
+            }
+        }
+
+        // Initialize sample vehicle data
+        async function initializeSampleVehicleData() {
+            if (!db) {
+                alert('Firebase not initialized. Please refresh the page and try again.');
+                return;
+            }
+            
+            if (!confirm('This will add sample vehicle data to your database. Continue?')) {
+                return;
+            }
+            
+            const sampleVehicles = [
+                {
+                    name: "2023 Luxury Sedan",
+                    make: "Mercedes-Benz",
+                    model: "C-Class",
+                    year: 2023,
+                    price: 45000,
+                    mileage: 12000,
+                    fuelType: "Gasoline",
+                    transmission: "Automatic",
+                    description: "Sleek design and advanced technology with premium interior",
+                    seoDescription: "Luxury Mercedes-Benz C-Class sedan with premium features and low mileage",
+                    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUSF4WLrfQ-a6MYutTzhj7XjnwALdyx8dcesyMi6-LQDqKcH6jslSjgzJLyXWJj3sjUY3GSveJdEX81zvposWKtjsAdV4NH8Zsfy4fdQZrYmgQxkjjZJk_DhsHYM6YwtGW_SOCBicmAVGfidJZ2eG69IJTXKS77PHSTesQeI7f9BtdU_0L1RVVRa3Nfz5nd5vlhb2KX9whZq24WK8JSkF13BXzDwnb1ZkSnz1E4cBr-mUh_Rmh0psY3arMxbE6rWo22_YUTyuRhJsS",
+                    features: ["Leather Seats", "Navigation System", "Sunroof", "Backup Camera"],
+                    seoKeywords: ["luxury sedan", "mercedes benz", "premium car", "low mileage"],
+                    stockNumber: "MB2023001",
+                    vin: "WDDGF4HB1MF123456",
+                    additionalImages: [],
+                    featured: true,
+                    certified: true,
+                    available: true,
+                    order: 1,
+                    dateAdded: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    name: "2022 Sports Coupe",
+                    make: "BMW",
+                    model: "M4",
+                    year: 2022,
+                    price: 65000,
+                    mileage: 8500,
+                    fuelType: "Gasoline",
+                    transmission: "Manual",
+                    description: "High performance and stylish appearance with racing-inspired design",
+                    seoDescription: "BMW M4 sports coupe with manual transmission and performance features",
+                    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7vfix40qg1ZRF07iIvzNJQe8G5SlILqmJQILl7QK7clh3aZt94oCULDI8qmYNHZ2G0svMx4p-StKd57BQ45fIXHqqNirqA6IVdP1BFzXbYbYW8VNv3RwQmuXsuZ1qPLjvZKAfz-zzN-SYLZx6Wg54SRuydBdSJDXegHfnJ3cfh0MmiiHYvi5RR7C72RcpaAas2GUWCGSZzVOO2DVSXjhFuTfgOGOIxQMyuKwKwx4x_E7sPTrHNImlwBylqGbxek8m0OPb5wAoBKlm",
+                    features: ["Sport Package", "Carbon Fiber Trim", "Performance Brakes", "Track Mode"],
+                    seoKeywords: ["sports car", "BMW M4", "manual transmission", "performance"],
+                    stockNumber: "BMW2022001",
+                    vin: "WBS4Y9C51NCE12345",
+                    additionalImages: [],
+                    featured: true,
+                    certified: false,
+                    available: true,
+                    order: 2,
+                    dateAdded: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    name: "2023 Family SUV",
+                    make: "Toyota",
+                    model: "Highlander",
+                    year: 2023,
+                    price: 38000,
+                    mileage: 15000,
+                    fuelType: "Hybrid",
+                    transmission: "CVT",
+                    description: "Spacious interior and powerful engine perfect for families",
+                    seoDescription: "Toyota Highlander hybrid SUV with third row seating and all-wheel drive",
+                    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpBdUZ4By3W1XzOXtdLQY_jvTHxJ_7zx8N16jAy8qYkNBI90W0XONYmFDx27emfRfdjAoGXUsi3eBr2B5lK8EJPKy3WHeWxf8UgUtsBl_7mbx7m9kDnWUD19AdYlBuceYLpCRcPriJri1Qg3LJiQOHoa8Mqtze9lrDRZyaEV0D199H5ibunEA0ni11nBOOYJ-hx_ufNEYRn_Ke4vkICs3vsozaWZGqx-mOzHs8zTVmfIlTFVewYRnU1lDZGAxdTy7av_uIgV9Mvcn5",
+                    features: ["3rd Row Seating", "All-Wheel Drive", "Safety Sense 2.0", "Wireless Charging"],
+                    seoKeywords: ["family SUV", "toyota highlander", "hybrid", "third row"],
+                    stockNumber: "TOY2023001",
+                    vin: "5TDBZRFH7NS123456",
+                    additionalImages: [],
+                    featured: true,
+                    certified: true,
+                    available: true,
+                    order: 3,
+                    dateAdded: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString()
+                },
+                {
+                    name: "2024 Electric Vehicle",
+                    make: "Tesla",
+                    model: "Model 3",
+                    year: 2024,
+                    price: 52000,
+                    mileage: 5000,
+                    fuelType: "Electric",
+                    transmission: "Single Speed",
+                    description: "Eco-friendly and innovative features with cutting-edge technology",
+                    seoDescription: "Tesla Model 3 electric vehicle with autopilot and premium features",
+                    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCIaUmyYCiUBxpzwrQdNHmMvbMAkjnZCPX3mMz82NO1j2YtAorY16LWSrYxfvnblm-sWBqsM4lEWVGd5cT6NJweh_PvrDi6_04QakULCqRUKDviuGxdacmHlmaT7vwmp-M7FrsnFH1IO-IM54ogsof89IeIXFdqOl6syDbx66vcAgtzUMMlkhRQWViRngVupJExa0fO1s99T_HH3ZBucaIurjSSfWTT8aOWP6L9MDl6iy4JaQm30DCNs8ZfRI14MFD2C06kfPy-3rS6",
+                    features: ["Autopilot", "Supercharging", "Premium Audio", "Glass Roof"],
+                    seoKeywords: ["electric car", "tesla model 3", "autopilot", "eco friendly"],
+                    stockNumber: "TES2024001",
+                    vin: "5YJ3E1EA0MF123456",
+                    additionalImages: [],
+                    featured: true,
+                    certified: false,
+                    available: true,
+                    order: 4,
+                    dateAdded: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString()
+                }
+            ];
+
+            try {
+                updateConnectionStatus('connecting', 'Adding sample data...');
+                
+                for (const vehicle of sampleVehicles) {
+                    await db.collection('vehicles').add(vehicle);
+                    console.log(`Added sample vehicle: ${vehicle.name}`);
+                }
+                
+                updateConnectionStatus('connected', 'Connected');
+                alert('Sample vehicle data initialized successfully!');
+                await loadVehicles();
+                
+            } catch (error) {
+                console.error('Error initializing sample vehicle data:', error);
+                updateConnectionStatus('error', 'Error adding data');
+                
+                let errorMessage = 'Error initializing sample vehicle data. ';
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Permission denied. Please check Firebase security rules.';
+                } else {
+                    errorMessage += error.message || 'Please try again.';
+                }
+                
+                alert(errorMessage);
+            }
+        }
+
+        // Test Firebase connection
+        async function testFirebaseConnection() {
+            if (!db) {
+                alert('Firebase not initialized. Please refresh the page.');
+                return;
+            }
+            
+            try {
+                updateConnectionStatus('connecting', 'Testing connection...');
+                console.log('Testing Firebase connection...');
+                
+                // Try to read from vehicles collection
+                const testQuery = await db.collection('vehicles').limit(1).get();
+                
+                // Try to write test data
+                const testDoc = await db.collection('test').add({
+                    message: 'Connection test',
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Clean up test data
+                await db.collection('test').doc(testDoc.id).delete();
+                
+                updateConnectionStatus('connected', 'Connected');
+                alert('Firebase connection successful! Read/write operations working properly.');
+                console.log('Firebase connection test passed');
+                
+            } catch (error) {
+                console.error('Firebase connection test failed:', error);
+                updateConnectionStatus('error', 'Connection Failed');
+                
+                let errorMessage = 'Firebase connection test failed:\n\n';
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Permission denied. Your Firebase security rules may be blocking access.';
+                } else if (error.code === 'unavailable') {
+                    errorMessage += 'Firebase service is currently unavailable.';
+                } else if (error.code === 'unauthenticated') {
+                    errorMessage += 'Authentication required. Check your Firebase configuration.';
+                } else {
+                    errorMessage += `Error: ${error.message || 'Unknown error'}`;
+                }
+                
+                alert(errorMessage);
+            }
+        }
+
+        // Load vehicles on page load
+        document.addEventListener('DOMContentLoaded', loadVehicles);
+
+        // Global functions for onclick handlers
+        window.editVehicle = editVehicle;
+        window.deleteVehicle = deleteVehicle;
+        window.duplicateVehicle = duplicateVehicle;
+        window.initializeSampleVehicleData = initializeSampleVehicleData;
+        window.testFirebaseConnection = testFirebaseConnection;
+    </script>
+
+    <!-- Initialize Sample Data Button and Connection Tools -->
+    <div class="fixed bottom-4 right-4 flex flex-col gap-2">
+        <button onclick="testFirebaseConnection()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            Test Connection
+        </button>
+        <button onclick="initializeSampleVehicleData()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+            Initialize Vehicle Data
+        </button>
+        <button onclick="location.reload()" class="bg-gray-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors">
+            Refresh Page
+        </button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>User Pages - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <h1 class="text-white text-2xl font-bold">Auto Emporium - User Pages</h1>
+                <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Homepage</a>
+            </div>
+        </header>
+
+        <div class="max-w-4xl mx-auto p-6">
+            <div class="mb-8">
+                <h2 class="text-white text-xl font-bold mb-4">User-Facing Pages</h2>
+                <p class="text-[#92aec8]">Navigate to different user pages and sections of the website.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Vehicle Details -->
+                <a href="vehicle-details.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-blue-600 p-3 rounded-lg group-hover:bg-white group-hover:text-blue-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Vehicle Catalog</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Browse our complete vehicle inventory with advanced search and filtering options.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Browse Vehicles →
+                    </div>
+                </a>
+
+                <!-- Privacy Policy -->
+                <a href="privacy-policy.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-green-600 p-3 rounded-lg group-hover:bg-white group-hover:text-green-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Privacy Policy</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Learn about how we protect your privacy and handle your personal information.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Read Policy →
+                    </div>
+                </a>
+
+                <!-- Terms of Service -->
+                <a href="terms-of-service.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-purple-600 p-3 rounded-lg group-hover:bg-white group-hover:text-purple-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Terms of Service</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Review our terms and conditions for using our website and services.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Read Terms →
+                    </div>
+                </a>
+
+                <!-- Back to Main Site -->
+                <a href="../index.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-yellow-600 p-3 rounded-lg group-hover:bg-white group-hover:text-yellow-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Main Website</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Return to the main Auto Emporium homepage with featured vehicles and company info.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Go to Homepage →
+                    </div>
+                </a>
+            </div>
+
+            <!-- Quick Navigation -->
+            <div class="mt-8 bg-[#243647] rounded-xl p-6">
+                <h3 class="text-white text-lg font-bold mb-4">Quick Links</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-[#1473cc] text-2xl font-bold">3</div>
+                        <div class="text-[#92aec8] text-sm">User Pages</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-green-500 text-2xl font-bold">🚗</div>
+                        <div class="text-[#92aec8] text-sm">Vehicles</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-yellow-500 text-2xl font-bold">📄</div>
+                        <div class="text-[#92aec8] text-sm">Legal</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-purple-500 text-2xl font-bold">🏠</div>
+                        <div class="text-[#92aec8] text-sm">Home</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>Service Appointments - Admin Panel - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <!-- Header -->
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-[#92aec8] hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                    <h1 class="text-white text-2xl font-bold">Service Appointments</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="total-appointments" class="text-[#92aec8] text-sm">Loading...</span>
+                    <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Website</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto p-6">
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Total Appointments</p>
+                            <p id="stat-total" class="text-white text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-blue-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Pending</p>
+                            <p id="stat-pending" class="text-yellow-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-yellow-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L10 9.586V6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Confirmed</p>
+                            <p id="stat-confirmed" class="text-green-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-green-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">In Progress</p>
+                            <p id="stat-progress" class="text-blue-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-blue-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#243647] rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#92aec8] text-sm font-medium">Completed</p>
+                            <p id="stat-completed" class="text-purple-400 text-2xl font-bold">0</p>
+                        </div>
+                        <div class="bg-purple-600 p-3 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Actions -->
+            <div class="bg-[#243647] rounded-xl p-6 mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <select id="status-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+
+                        <select id="service-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                            <option value="">All Services</option>
+                            <option value="Vehicle Sales">Vehicle Sales</option>
+                            <option value="Maintenance & Repair">Maintenance & Repair</option>
+                            <option value="Financing Solutions">Financing Solutions</option>
+                            <option value="Parts & Accessories">Parts & Accessories</option>
+                            <option value="Inspection Services">Inspection Services</option>
+                            <option value="Emergency Services">Emergency Services</option>
+                        </select>
+
+                        <input type="date" id="date-filter" class="px-4 py-2 bg-[#1c2d3e] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button id="export-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Export CSV
+                        </button>
+                        <button id="refresh-btn" class="px-4 py-2 bg-[#1473cc] text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments List -->
+            <div class="bg-[#243647] rounded-xl overflow-hidden">
+                <div class="p-6 border-b border-[#374353]">
+                    <h3 class="text-white text-lg font-bold">Service Appointments</h3>
+                    <p class="text-[#92aec8] text-sm">Manage and schedule customer service appointments</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="p-8 text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1473cc] mx-auto mb-4"></div>
+                    <p class="text-[#92aec8]">Loading appointments...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden p-8 text-center">
+                    <svg class="w-16 h-16 text-[#92aec8] mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                    </svg>
+                    <p class="text-[#92aec8] text-lg mb-2">No service appointments found</p>
+                    <p class="text-[#92aec8] text-sm">Service appointments will appear here when customers schedule appointments through the website.</p>
+                </div>
+
+                <!-- Appointments Table -->
+                <div id="appointments-container" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-[#1c2d3e]">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Customer</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Service Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Appointment Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Contact</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-[#92aec8] uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointments-table-body" class="divide-y divide-[#374353]">
+                                <!-- Appointments will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View/Edit Appointment Modal -->
+    <div id="appointment-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-[#111a22] border border-[#243647] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-[#374353]">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-white text-xl font-bold">Service Appointment Details</h3>
+                    <button id="close-modal" class="text-[#92aec8] hover:text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Customer Information -->
+                    <div class="space-y-4">
+                        <h4 class="text-white text-lg font-bold">Customer Information</h4>
+                        
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Customer Name</label>
+                            <p id="modal-customer-name" class="text-white text-lg"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Email</label>
+                            <p id="modal-email" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Phone</label>
+                            <p id="modal-phone" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Service Type</label>
+                            <p id="modal-service-type" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Appointment ID</label>
+                            <p id="modal-appointment-id" class="text-[#1473cc] font-mono"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Requested Date & Time</label>
+                            <p id="modal-requested-datetime" class="text-white"></p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-1">Vehicle Information</label>
+                            <p id="modal-vehicle-info" class="text-white"></p>
+                        </div>
+                    </div>
+
+                    <!-- Status and Management -->
+                    <div class="space-y-4">
+                        <h4 class="text-white text-lg font-bold">Appointment Management</h4>
+                        
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Status</label>
+                            <select id="modal-status" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Assigned Technician</label>
+                            <input type="text" id="modal-assigned" placeholder="Enter technician name" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc]">
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Confirmed Date & Time</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="date" id="modal-confirmed-date" class="px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                <select id="modal-confirmed-time" class="px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                    <option value="">Select Time</option>
+                                    <option value="9:00 AM">9:00 AM</option>
+                                    <option value="10:00 AM">10:00 AM</option>
+                                    <option value="11:00 AM">11:00 AM</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="1:00 PM">1:00 PM</option>
+                                    <option value="2:00 PM">2:00 PM</option>
+                                    <option value="3:00 PM">3:00 PM</option>
+                                    <option value="4:00 PM">4:00 PM</option>
+                                    <option value="5:00 PM">5:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[#92aec8] text-sm font-medium mb-2">Estimated Duration</label>
+                            <select id="modal-duration" class="w-full px-4 py-2 bg-[#243647] border border-[#374353] rounded-lg text-white focus:outline-none focus:border-[#1473cc]">
+                                <option value="">Select Duration</option>
+                                <option value="30 minutes">30 minutes</option>
+                                <option value="1 hour">1 hour</option>
+                                <option value="1.5 hours">1.5 hours</option>
+                                <option value="2 hours">2 hours</option>
+                                <option value="3 hours">3 hours</option>
+                                <option value="4 hours">4 hours</option>
+                                <option value="Half day">Half day</option>
+                                <option value="Full day">Full day</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button id="save-appointment" class="flex-1 bg-[#1473cc] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                Save Changes
+                            </button>
+                            <button id="delete-appointment" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Notes -->
+                <div class="mt-6 pt-6 border-t border-[#374353]">
+                    <h4 class="text-white text-lg font-bold mb-4">Customer Notes</h4>
+                    <div class="bg-[#243647] rounded-lg p-4">
+                        <p id="modal-customer-notes" class="text-white whitespace-pre-wrap"></p>
+                    </div>
+                </div>
+
+                <!-- Admin Notes -->
+                <div class="mt-6 pt-6 border-t border-[#374353]">
+                    <h4 class="text-white text-lg font-bold mb-4">Admin Notes</h4>
+                    <textarea id="modal-admin-notes" rows="4" placeholder="Add internal notes about this appointment..." class="w-full px-4 py-3 bg-[#243647] border border-[#374353] rounded-lg text-white placeholder-[#92aec8] focus:outline-none focus:border-[#1473cc]"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let db = null;
+        let allAppointments = [];
+        let currentAppointmentId = null;
+
+        // Initialize Firebase
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to initialize Firebase
+            try {
+                if (typeof firebase !== 'undefined' && firebase.apps.length === 0) {
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyBl8fYB2ZvNjKs7ufLFQh7kzjskE5Kzqr8",
+                        authDomain: "gym-app-bd9c1.firebaseapp.com",
+                        projectId: "gym-app-bd9c1",
+                        storageBucket: "gym-app-bd9c1.appspot.com",
+                        messagingSenderId: "648751600647",
+                        appId: "1:648751600647:web:9a2b5c7d8e3f4g5h"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                if (firebase.apps.length > 0) {
+                    db = firebase.firestore();
+                    console.log('✅ Firebase initialized successfully');
+                }
+            } catch (error) {
+                console.warn('⚠️ Firebase initialization failed:', error);
+                console.log('📱 Using localStorage fallback');
+            }
+
+            // Load appointments
+            loadAppointments();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Filter change events
+            document.getElementById('status-filter').addEventListener('change', filterAppointments);
+            document.getElementById('service-filter').addEventListener('change', filterAppointments);
+            document.getElementById('date-filter').addEventListener('change', filterAppointments);
+            
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', loadAppointments);
+            
+            // Export button
+            document.getElementById('export-btn').addEventListener('click', exportToCSV);
+            
+            // Modal events
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('save-appointment').addEventListener('click', saveAppointmentChanges);
+            document.getElementById('delete-appointment').addEventListener('click', deleteAppointment);
+            
+            // Close modal when clicking outside
+            document.getElementById('appointment-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        async function loadAppointments() {
+            const loadingState = document.getElementById('loading-state');
+            const emptyState = document.getElementById('empty-state');
+            const appointmentsContainer = document.getElementById('appointments-container');
+            
+            loadingState.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            appointmentsContainer.classList.add('hidden');
+
+            try {
+                let appointments = [];
+                
+                if (db) {
+                    // Load from Firebase
+                    const snapshot = await db.collection('service-appointments')
+                        .orderBy('timestamp', 'desc')
+                        .get();
+                    
+                    appointments = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                } else {
+                    // Load from localStorage fallback
+                    const stored = localStorage.getItem('serviceAppointments');
+                    if (stored) {
+                        appointments = JSON.parse(stored);
+                    }
+                }
+
+                allAppointments = appointments;
+                updateStats(appointments);
+                displayAppointments(appointments);
+                
+            } catch (error) {
+                console.error('Error loading appointments:', error);
+                showError('Failed to load service appointments');
+            } finally {
+                loadingState.classList.add('hidden');
+            }
+        }
+
+        function updateStats(appointments) {
+            const total = appointments.length;
+            const pending = appointments.filter(a => a.status === 'pending' || !a.status).length;
+            const confirmed = appointments.filter(a => a.status === 'confirmed').length;
+            const progress = appointments.filter(a => a.status === 'in-progress').length;
+            const completed = appointments.filter(a => a.status === 'completed').length;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-confirmed').textContent = confirmed;
+            document.getElementById('stat-progress').textContent = progress;
+            document.getElementById('stat-completed').textContent = completed;
+            document.getElementById('total-appointments').textContent = `${total} total appointments`;
+        }
+
+        function displayAppointments(appointments) {
+            const container = document.getElementById('appointments-container');
+            const emptyState = document.getElementById('empty-state');
+            const tableBody = document.getElementById('appointments-table-body');
+
+            if (appointments.length === 0) {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            tableBody.innerHTML = appointments.map(appointment => {
+                const requestedDate = new Date(appointment.preferredDate || Date.now());
+                const status = appointment.status || 'pending';
+                const statusColors = {
+                    'pending': 'bg-yellow-600',
+                    'confirmed': 'bg-green-600',
+                    'in-progress': 'bg-blue-600',
+                    'completed': 'bg-purple-600',
+                    'cancelled': 'bg-red-600'
+                };
+
+                return `
+                    <tr class="hover:bg-[#1c2d3e] transition-colors cursor-pointer" onclick="openAppointmentModal('${appointment.id || appointment.appointmentId}')">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-medium text-white rounded-full ${statusColors[status]}">
+                                ${status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-white font-medium">${appointment.customerName || 'Unknown'}</div>
+                            <div class="text-[#92aec8] text-sm">${appointment.appointmentId || 'No ID'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-white">${appointment.serviceType || 'Unknown Service'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-white">${requestedDate.toLocaleDateString()}</div>
+                            <div class="text-[#92aec8] text-sm">${appointment.preferredTime || 'No time specified'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-[#92aec8] text-sm">${appointment.email || 'No email'}</div>
+                            <div class="text-[#92aec8] text-sm">${appointment.phone || 'No phone'}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="event.stopPropagation(); openAppointmentModal('${appointment.id || appointment.appointmentId}')" class="text-[#1473cc] hover:text-blue-400 mr-3">
+                                View
+                            </button>
+                            <button onclick="event.stopPropagation(); quickStatusUpdate('${appointment.id || appointment.appointmentId}', '${status === 'confirmed' ? 'pending' : 'confirmed'}')" class="text-green-400 hover:text-green-300">
+                                ${status === 'confirmed' ? 'Unconfirm' : 'Confirm'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterAppointments() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const serviceFilter = document.getElementById('service-filter').value;
+            const dateFilter = document.getElementById('date-filter').value;
+
+            let filtered = allAppointments.filter(appointment => {
+                const status = appointment.status || 'pending';
+                const service = appointment.serviceType || '';
+                const date = new Date(appointment.preferredDate || Date.now());
+                const filterDate = dateFilter ? new Date(dateFilter) : null;
+
+                const statusMatch = !statusFilter || status === statusFilter;
+                const serviceMatch = !serviceFilter || service === serviceFilter;
+                const dateMatch = !filterDate || date.toDateString() === filterDate.toDateString();
+
+                return statusMatch && serviceMatch && dateMatch;
+            });
+
+            displayAppointments(filtered);
+        }
+
+        function openAppointmentModal(appointmentId) {
+            const appointment = allAppointments.find(a => (a.id || a.appointmentId) === appointmentId);
+            if (!appointment) return;
+
+            currentAppointmentId = appointmentId;
+            
+            // Populate modal fields
+            document.getElementById('modal-customer-name').textContent = appointment.customerName || 'Unknown';
+            document.getElementById('modal-email').textContent = appointment.email || 'No email provided';
+            document.getElementById('modal-phone').textContent = appointment.phone || 'No phone provided';
+            document.getElementById('modal-service-type').textContent = appointment.serviceType || 'Unknown Service';
+            document.getElementById('modal-appointment-id').textContent = appointment.appointmentId || appointmentId;
+            document.getElementById('modal-vehicle-info').textContent = appointment.vehicleInfo || 'No vehicle information provided';
+            document.getElementById('modal-customer-notes').textContent = appointment.notes || 'No additional notes provided';
+            
+            const requestedDate = new Date(appointment.preferredDate || Date.now());
+            document.getElementById('modal-requested-datetime').textContent = 
+                `${requestedDate.toLocaleDateString()} at ${appointment.preferredTime || 'No time specified'}`;
+            
+            // Set form values
+            document.getElementById('modal-status').value = appointment.status || 'pending';
+            document.getElementById('modal-assigned').value = appointment.assignedTechnician || '';
+            document.getElementById('modal-confirmed-date').value = appointment.confirmedDate || appointment.preferredDate || '';
+            document.getElementById('modal-confirmed-time').value = appointment.confirmedTime || appointment.preferredTime || '';
+            document.getElementById('modal-duration').value = appointment.estimatedDuration || '';
+            document.getElementById('modal-admin-notes').value = appointment.adminNotes || '';
+            
+            // Show modal
+            document.getElementById('appointment-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('appointment-modal').classList.add('hidden');
+            currentAppointmentId = null;
+        }
+
+        async function saveAppointmentChanges() {
+            if (!currentAppointmentId) return;
+
+            const updates = {
+                status: document.getElementById('modal-status').value,
+                assignedTechnician: document.getElementById('modal-assigned').value,
+                confirmedDate: document.getElementById('modal-confirmed-date').value,
+                confirmedTime: document.getElementById('modal-confirmed-time').value,
+                estimatedDuration: document.getElementById('modal-duration').value,
+                adminNotes: document.getElementById('modal-admin-notes').value,
+                lastUpdated: new Date().toISOString()
+            };
+
+            try {
+                if (db) {
+                    // Update in Firebase
+                    await db.collection('service-appointments').doc(currentAppointmentId).update(updates);
+                } else {
+                    // Update in localStorage
+                    const appointments = JSON.parse(localStorage.getItem('serviceAppointments') || '[]');
+                    const index = appointments.findIndex(a => (a.id || a.appointmentId) === currentAppointmentId);
+                    if (index !== -1) {
+                        appointments[index] = { ...appointments[index], ...updates };
+                        localStorage.setItem('serviceAppointments', JSON.stringify(appointments));
+                    }
+                }
+
+                // Update local array
+                const index = allAppointments.findIndex(a => (a.id || a.appointmentId) === currentAppointmentId);
+                if (index !== -1) {
+                    allAppointments[index] = { ...allAppointments[index], ...updates };
+                }
+
+                closeModal();
+                displayAppointments(allAppointments);
+                updateStats(allAppointments);
+                showSuccess('Appointment updated successfully');
+                
+            } catch (error) {
+                console.error('Error updating appointment:', error);
+                showError('Failed to update appointment');
+            }
+        }
+
+        async function deleteAppointment() {
+            if (!currentAppointmentId || !confirm('Are you sure you want to delete this appointment? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                if (db) {
+                    // Delete from Firebase
+                    await db.collection('service-appointments').doc(currentAppointmentId).delete();
+                } else {
+                    // Delete from localStorage
+                    const appointments = JSON.parse(localStorage.getItem('serviceAppointments') || '[]');
+                    const filtered = appointments.filter(a => (a.id || a.appointmentId) !== currentAppointmentId);
+                    localStorage.setItem('serviceAppointments', JSON.stringify(filtered));
+                }
+
+                // Remove from local array
+                allAppointments = allAppointments.filter(a => (a.id || a.appointmentId) !== currentAppointmentId);
+
+                closeModal();
+                displayAppointments(allAppointments);
+                updateStats(allAppointments);
+                showSuccess('Appointment deleted successfully');
+                
+            } catch (error) {
+                console.error('Error deleting appointment:', error);
+                showError('Failed to delete appointment');
+            }
+        }
+
+        async function quickStatusUpdate(appointmentId, newStatus) {
+            try {
+                const updates = {
+                    status: newStatus,
+                    lastUpdated: new Date().toISOString()
+                };
+
+                if (db) {
+                    await db.collection('service-appointments').doc(appointmentId).update(updates);
+                } else {
+                    const appointments = JSON.parse(localStorage.getItem('serviceAppointments') || '[]');
+                    const index = appointments.findIndex(a => (a.id || a.appointmentId) === appointmentId);
+                    if (index !== -1) {
+                        appointments[index] = { ...appointments[index], ...updates };
+                        localStorage.setItem('serviceAppointments', JSON.stringify(appointments));
+                    }
+                }
+
+                // Update local array
+                const index = allAppointments.findIndex(a => (a.id || a.appointmentId) === appointmentId);
+                if (index !== -1) {
+                    allAppointments[index] = { ...allAppointments[index], ...updates };
+                }
+
+                displayAppointments(allAppointments);
+                updateStats(allAppointments);
+                showSuccess(`Appointment ${newStatus === 'confirmed' ? 'confirmed' : 'status updated'}`);
+                
+            } catch (error) {
+                console.error('Error updating appointment status:', error);
+                showError('Failed to update status');
+            }
+        }
+
+        function exportToCSV() {
+            const headers = ['Date', 'Time', 'Customer Name', 'Email', 'Phone', 'Service Type', 'Status', 'Vehicle Info', 'Notes', 'Appointment ID'];
+            
+            const csvContent = [
+                headers.join(','),
+                ...allAppointments.map(appointment => {
+                    const date = new Date(appointment.preferredDate || Date.now()).toLocaleDateString();
+                    const time = `"${appointment.preferredTime || ''}"`;
+                    const name = `"${appointment.customerName || ''}"`;
+                    const email = `"${appointment.email || ''}"`;
+                    const phone = `"${appointment.phone || ''}"`;
+                    const service = `"${appointment.serviceType || ''}"`;
+                    const status = `"${appointment.status || 'pending'}"`;
+                    const vehicle = `"${appointment.vehicleInfo || ''}"`;
+                    const notes = `"${(appointment.notes || '').replace(/"/g, '""')}"`;
+                    const id = `"${appointment.appointmentId || appointment.id || ''}"`;
+                    
+                    return [date, time, name, email, phone, service, status, vehicle, notes, id].join(',');
+                })
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `service-appointments-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showSuccess(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+
+        function showError(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

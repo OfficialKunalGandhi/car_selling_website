@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <title>Admin Panel - Auto Emporium</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+    <div class="min-h-screen bg-[#111a22]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+        <header class="bg-[#243647] border-b border-[#92aec8] p-4">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <h1 class="text-white text-2xl font-bold">Auto Emporium Admin Panel</h1>
+                <a href="../index.html" class="text-white hover:text-[#1473cc] transition-colors">← Back to Website</a>
+            </div>
+        </header>
+
+        <div class="max-w-4xl mx-auto p-6">
+            <div class="mb-8">
+                <h2 class="text-white text-xl font-bold mb-4">Admin Dashboard</h2>
+                <p class="text-[#92aec8]">Choose an admin panel to manage different aspects of the website.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Team Management -->
+                <a href="admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-blue-600 p-3 rounded-lg group-hover:bg-white group-hover:text-blue-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Team Management</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Manage team members, add new staff, and update employee information.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Manage Team →
+                    </div>
+                </a>
+
+                <!-- Vehicle Management -->
+                <a href="vehicles-admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-green-600 p-3 rounded-lg group-hover:bg-white group-hover:text-green-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Vehicle Inventory</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Add, edit, and manage vehicle inventory with real-time dashboard statistics.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Manage Vehicles →
+                    </div>
+                </a>
+
+                <!-- Slider Management -->
+                <a href="slides-admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-purple-600 p-3 rounded-lg group-hover:bg-white group-hover:text-purple-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Homepage Slider</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Manage homepage slider content, images, and promotional banners.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Manage Slides →
+                    </div>
+                </a>
+            </div>
+
+            <!-- Second Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <!-- Contact Submissions -->
+                <a href="contact-submissions-admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-orange-600 p-3 rounded-lg group-hover:bg-white group-hover:text-orange-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Contact Submissions</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">View and manage customer contact form submissions and inquiries.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        View Submissions →
+                    </div>
+                </a>
+
+                <!-- Service Appointments -->
+                <a href="service-appointments-admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-teal-600 p-3 rounded-lg group-hover:bg-white group-hover:text-teal-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Service Appointments</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Schedule and manage customer service appointments and bookings.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Manage Appointments →
+                    </div>
+                </a>
+
+                <!-- Vehicle Inquiries -->
+                <a href="vehicle-inquiries-admin.html" class="bg-[#243647] rounded-xl p-6 hover:bg-[#1473cc] transition-colors group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-purple-600 p-3 rounded-lg group-hover:bg-white group-hover:text-purple-600 transition-colors">
+                            <svg class="w-6 h-6 text-white group-hover:text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-white text-lg font-bold">Vehicle Inquiries</h3>
+                    </div>
+                    <p class="text-[#92aec8] group-hover:text-white transition-colors">Manage vehicle inquiries and test drive requests from customers.</p>
+                    <div class="mt-4 text-[#1473cc] group-hover:text-white font-medium">
+                        Manage Inquiries →
+                    </div>
+                </a>
+            </div>
+
+            <!-- Quick Stats Overview -->
+            <div class="mt-8 bg-[#243647] rounded-xl p-6">
+                <h3 class="text-white text-lg font-bold mb-4">Quick Access</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="text-[#1473cc] text-2xl font-bold">6</div>
+                        <div class="text-[#92aec8] text-sm">Admin Panels</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-green-500 text-2xl font-bold">✓</div>
+                        <div class="text-[#92aec8] text-sm">Organized</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-yellow-500 text-2xl font-bold">🔒</div>
+                        <div class="text-[#92aec8] text-sm">Secure</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-purple-500 text-2xl font-bold">⚡</div>
+                        <div class="text-[#92aec8] text-sm">Fast</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
